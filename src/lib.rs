@@ -230,19 +230,20 @@ impl<'a, I, V> RandomAccessIterator for Tickets<'a, I, V> where I: RandomAccessI
 
 }
 
-pub struct IntoIter<V> {
-    inner: iter::FilterMap<Entry<V>, V, vec::IntoIter<Entry<V>>, fn(Entry<V>) -> Option<V>>,
-    remaining: usize
+struct GenericIter<V, I> where I: Iterator<Item=V> {
+    inner: I,
+    remaining: usize,
+
 }
 
-impl<V> ExactSizeIterator for IntoIter<V> {
+impl<V, I> ExactSizeIterator for GenericIter<V, I> where I: Iterator<Item=V> {
     #[inline]
     fn len(&self) -> usize {
         self.remaining
     }
 }
 
-impl<V> Iterator for IntoIter<V> {
+impl<V, I> Iterator for GenericIter<V, I> where I: Iterator<Item = V> {
     type Item = V;
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         if self.remaining > 0 {
@@ -258,7 +259,7 @@ impl<V> Iterator for IntoIter<V> {
     }
 }
 
-impl<V> DoubleEndedIterator for IntoIter<V> {
+impl<V, I> DoubleEndedIterator for GenericIter<V, I> where I: DoubleEndedIterator<Item=V> {
     fn next_back(&mut self) -> Option<V> {
         if self.remaining > 0 {
             self.remaining -= 1;
@@ -269,83 +270,23 @@ impl<V> DoubleEndedIterator for IntoIter<V> {
     }
 }
 
-pub struct Iter<'a, V> where V: 'a {
-    inner: iter::FilterMap<&'a Entry<V>, &'a V, slice::Iter<'a, Entry<V>>, fn(&'a Entry<V>) -> Option<&'a V>>,
-    remaining: usize
-}
+pub type IntoIter<V>    = GenericIter<V,
+                                      iter::FilterMap<Entry<V>,
+                                                      V,
+                                                      vec::IntoIter<Entry<V>>,
+                                      fn(Entry<V>) -> Option<V>>>;
 
-impl<'a, V> ExactSizeIterator for Iter<'a, V> where V: 'a {
-    #[inline]
-    fn len(&self) -> usize {
-        self.remaining
-    }
-}
+pub type Iter<'a, V>    = GenericIter<&'a V,
+                                      iter::FilterMap<&'a Entry<V>,
+                                                      &'a V,
+                                                      slice::Iter<'a, Entry<V>>,
+                                      fn(&'a Entry<V>) -> Option<&'a V>>>;
 
-impl<'a, V> Iterator for Iter<'a, V> where V: 'a {
-    type Item = &'a V;
-    fn next(&mut self) -> Option<<Self as Iterator>::Item> {
-        if self.remaining > 0 {
-            self.remaining -= 1;
-            self.inner.next()
-        } else {
-            None
-        }
-    }
-    #[inline]
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        (self.len(), Some(self.len()))
-    }
-}
-
-impl<'a, V> DoubleEndedIterator for Iter<'a, V> where V: 'a {
-    fn next_back(&mut self) -> Option<<Self as Iterator>::Item> {
-        if self.remaining > 0 {
-            self.remaining -= 1;
-            self.inner.next_back()
-        } else {
-            None
-        }
-    }
-}
-
-pub struct IterMut<'a, V> where V: 'a {
-    inner: iter::FilterMap<&'a mut Entry<V>, &'a mut V, slice::IterMut<'a, Entry<V>>, fn(&'a mut Entry<V>) -> Option<&'a mut V>>,
-    remaining: usize
-}
-
-impl<'a, V> ExactSizeIterator for IterMut<'a, V> where V: 'a {
-    #[inline]
-    fn len(&self) -> usize {
-        self.remaining
-    }
-}
-
-impl<'a, V> Iterator for IterMut<'a, V> where V: 'a {
-    type Item = &'a mut V;
-    fn next(&mut self) -> Option<<Self as Iterator>::Item> {
-        if self.remaining > 0 {
-            self.remaining -= 1;
-            self.inner.next()
-        } else {
-            None
-        }
-    }
-    #[inline]
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        (self.len(), Some(self.len()))
-    }
-}
-
-impl<'a, V> DoubleEndedIterator for IterMut<'a, V> where V: 'a {
-    fn next_back(&mut self) -> Option<<Self as Iterator>::Item> {
-        if self.remaining > 0 {
-            self.remaining -= 1;
-            self.inner.next_back()
-        } else {
-            None
-        }
-    }
-}
+pub type IterMut<'a, V> = GenericIter<&'a mut V,
+                                      iter::FilterMap<&'a mut Entry<V>,
+                                                      &'a mut V,
+                                                      slice::IterMut<'a, Entry<V>>,
+                                      fn(&'a mut Entry<V>) -> Option<&'a mut V>>>;
 
 pub struct CoatCheck<V> {
     tag: usize,
@@ -526,21 +467,30 @@ impl<V> CoatCheck<V> {
 
     /// Iterate over the items in this `CoatCheck<V>`.
     #[inline]
-    pub fn iter(&self) -> Iter<V> {
-        Iter { remaining: self.len(), inner: self.data.iter().filter_map(Entry::<V>::full_ref) }
+    pub fn iter<'a>(&'a self) -> Iter<'a, V> {
+        Iter {
+            remaining: self.len(),
+            inner: self.data.iter().filter_map(Entry::<V>::full_ref as fn(&'a Entry<V>) -> Option<&'a V>),
+        }
     }
 
     /// Mutably iterate over the items in this `CoatCheck<V>`.
     #[inline]
-    pub fn iter_mut(&mut self) -> IterMut<V> {
-        IterMut { remaining: self.len(), inner: self.data.iter_mut().filter_map(Entry::<V>::full_mut) }
+    pub fn iter_mut<'a>(&'a mut self) -> IterMut<'a, V> {
+        IterMut {
+            remaining: self.len(),
+            inner: self.data.iter_mut().filter_map(Entry::<V>::full_mut as fn(&'a mut Entry<V>) -> Option<&'a mut V>)
+        }
     }
 
     /// Creates a consuming iterator, that is, one that moves each value out of the coat check (from
     /// start to end). The coat check cannot be used after calling this.
     #[inline]
     pub fn into_iter(self) -> IntoIter<V> {
-        IntoIter { remaining: self.len(), inner: self.data.into_iter().filter_map(Entry::<V>::full) }
+        IntoIter {
+            remaining: self.len(),
+            inner: self.data.into_iter().filter_map(Entry::<V>::full as fn(Entry<V>) -> Option<V>)
+        }
     }
 
     /// Check if a ticket belongs to this `CoatCheck<V>`.
