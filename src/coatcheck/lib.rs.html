@@ -696,6 +696,10 @@
 <span id="654">654</span>
 <span id="655">655</span>
 <span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -1295,64 +1299,68 @@
     }
 }
 
-<span class='attribute'>#[<span class='ident'>test</span>]</span>
-<span class='kw'>fn</span> <span class='ident'>test</span>() {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>c1</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>c2</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
+<span class='kw'>mod</span> <span class='ident'>test</span> {
+    <span class='kw'>use</span> <span class='ident'>super</span>::<span class='op'>*</span>;
 
-    <span class='kw'>let</span> <span class='ident'>t1</span> <span class='op'>=</span> <span class='ident'>c1</span>.<span class='ident'>check</span>(<span class='number'>1</span>);
-    <span class='kw'>let</span> <span class='ident'>t2</span> <span class='op'>=</span> <span class='ident'>c1</span>.<span class='ident'>check</span>(<span class='number'>2</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>[<span class='ident'>t1</span>], <span class='number'>1</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>[<span class='ident'>t2</span>], <span class='number'>2</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>[<span class='ident'>t1</span>], <span class='number'>1</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>.<span class='ident'>claim</span>(<span class='ident'>t1</span>).<span class='ident'>unwrap</span>(), <span class='number'>1</span>);
-    <span class='kw'>let</span> <span class='ident'>t3</span> <span class='op'>=</span> <span class='ident'>c1</span>.<span class='ident'>check</span>(<span class='number'>3</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>.<span class='ident'>claim</span>(<span class='ident'>t3</span>).<span class='ident'>unwrap</span>(), <span class='number'>3</span>);
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>main</span>() {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>c1</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>c2</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
 
-    <span class='kw'>let</span> <span class='ident'>t4</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>check</span>(<span class='number'>4</span>);
-    <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>check</span>(<span class='number'>5</span>);
+        <span class='kw'>let</span> <span class='ident'>t1</span> <span class='op'>=</span> <span class='ident'>c1</span>.<span class='ident'>check</span>(<span class='number'>1</span>);
+        <span class='kw'>let</span> <span class='ident'>t2</span> <span class='op'>=</span> <span class='ident'>c1</span>.<span class='ident'>check</span>(<span class='number'>2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>[<span class='ident'>t1</span>], <span class='number'>1</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>[<span class='ident'>t2</span>], <span class='number'>2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>[<span class='ident'>t1</span>], <span class='number'>1</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>.<span class='ident'>claim</span>(<span class='ident'>t1</span>).<span class='ident'>unwrap</span>(), <span class='number'>1</span>);
+        <span class='kw'>let</span> <span class='ident'>t3</span> <span class='op'>=</span> <span class='ident'>c1</span>.<span class='ident'>check</span>(<span class='number'>3</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>c1</span>.<span class='ident'>claim</span>(<span class='ident'>t3</span>).<span class='ident'>unwrap</span>(), <span class='number'>3</span>);
 
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>c2</span>.<span class='ident'>claim</span>(<span class='ident'>t2</span>).<span class='ident'>is_err</span>());
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>c1</span>.<span class='ident'>claim</span>(<span class='ident'>t4</span>).<span class='ident'>is_err</span>());
-    <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='ident'>c2</span>);
+        <span class='kw'>let</span> <span class='ident'>t4</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>check</span>(<span class='number'>4</span>);
+        <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>check</span>(<span class='number'>5</span>);
 
-    {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>iter</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>cloned</span>(), <span class='prelude-val'>Some</span>(<span class='number'>4</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>cloned</span>(), <span class='prelude-val'>Some</span>(<span class='number'>5</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>None</span>);
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>c2</span>.<span class='ident'>claim</span>(<span class='ident'>t2</span>).<span class='ident'>is_err</span>());
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>c1</span>.<span class='ident'>claim</span>(<span class='ident'>t4</span>).<span class='ident'>is_err</span>());
+        <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='ident'>c2</span>);
+
+        {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>iter</span>();
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>cloned</span>(), <span class='prelude-val'>Some</span>(<span class='number'>4</span>));
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>cloned</span>(), <span class='prelude-val'>Some</span>(<span class='number'>5</span>));
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>None</span>);
+        }
+
+        {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>iter_mut</span>();
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>cloned</span>(), <span class='prelude-val'>Some</span>(<span class='number'>4</span>));
+            <span class='kw'>let</span> <span class='ident'>it</span> <span class='op'>=</span> <span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>unwrap</span>();
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>it</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='number'>5</span>);
+            <span class='op'>*</span><span class='ident'>it</span> <span class='op'>=</span> <span class='number'>6</span>;
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>None</span>);
+        }
+
+        {
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>into_iter</span>();
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>Some</span>(<span class='number'>4</span>));
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>Some</span>(<span class='number'>6</span>));
+            <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>None</span>)
+        }
     }
 
-    {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>iter_mut</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>cloned</span>(), <span class='prelude-val'>Some</span>(<span class='number'>4</span>));
-        <span class='kw'>let</span> <span class='ident'>it</span> <span class='op'>=</span> <span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>unwrap</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>it</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='number'>5</span>);
-        <span class='op'>*</span><span class='ident'>it</span> <span class='op'>=</span> <span class='number'>6</span>;
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>None</span>);
-    }
-
-    {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>c2</span>.<span class='ident'>into_iter</span>();
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>Some</span>(<span class='number'>4</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>Some</span>(<span class='number'>6</span>));
-        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>(), <span class='prelude-val'>None</span>)
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>check_all</span>() {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>cc</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>v</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Ticket</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>cc</span>.<span class='ident'>check_all</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1i32</span>,<span class='number'>2</span>,<span class='number'>3</span>,<span class='number'>4</span>].<span class='ident'>into_iter</span>()).<span class='ident'>collect</span>();
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>len</span>(), <span class='number'>4</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>4</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>3</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>1</span>);
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v</span>.<span class='ident'>is_empty</span>());
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>is_empty</span>());
     }
 }
-
-<span class='attribute'>#[<span class='ident'>test</span>]</span>
-<span class='kw'>fn</span> <span class='ident'>test_check_all</span>() {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>cc</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>v</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Ticket</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>cc</span>.<span class='ident'>check_all</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>1i32</span>,<span class='number'>2</span>,<span class='number'>3</span>,<span class='number'>4</span>].<span class='ident'>into_iter</span>()).<span class='ident'>collect</span>();
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>len</span>(), <span class='number'>4</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>4</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>3</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>2</span>);
-    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>v</span>.<span class='ident'>pop</span>().<span class='ident'>unwrap</span>()).<span class='ident'>unwrap</span>(), <span class='number'>1</span>);
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>v</span>.<span class='ident'>is_empty</span>());
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>cc</span>.<span class='ident'>is_empty</span>());
-}
-
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
