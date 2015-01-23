@@ -230,6 +230,7 @@ impl<'a, I, V> RandomAccessIterator for Tickets<'a, I, V> where I: RandomAccessI
 
 }
 
+#[doc(hidden)]
 struct GenericIter<V, I> where I: Iterator<Item=V> {
     inner: I,
     remaining: usize,
@@ -270,24 +271,28 @@ impl<V, I> DoubleEndedIterator for GenericIter<V, I> where I: DoubleEndedIterato
     }
 }
 
+#[doc(hidden)]
 pub type IntoIter<V>    = GenericIter<V,
                                       iter::FilterMap<Entry<V>,
                                                       V,
                                                       vec::IntoIter<Entry<V>>,
                                       fn(Entry<V>) -> Option<V>>>;
 
+#[doc(hidden)]
 pub type Iter<'a, V>    = GenericIter<&'a V,
                                       iter::FilterMap<&'a Entry<V>,
                                                       &'a V,
                                                       slice::Iter<'a, Entry<V>>,
                                       fn(&'a Entry<V>) -> Option<&'a V>>>;
 
+#[doc(hidden)]
 pub type IterMut<'a, V> = GenericIter<&'a mut V,
                                       iter::FilterMap<&'a mut Entry<V>,
                                                       &'a mut V,
                                                       slice::IterMut<'a, Entry<V>>,
                                       fn(&'a mut Entry<V>) -> Option<&'a mut V>>>;
 
+/// A data structure storing values indexed by tickets.
 pub struct CoatCheck<V> {
     tag: usize,
     data: Vec<Entry<V>>,
@@ -295,7 +300,6 @@ pub struct CoatCheck<V> {
     next_free: usize,
 }
 
-/// A data structure storing values indexed by tickets.
 impl<V> CoatCheck<V> {
     /// Constructs a new, empty `CoatCheck<T>`.
     ///
