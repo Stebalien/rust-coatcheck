@@ -596,61 +596,65 @@ impl<V> Default for CoatCheck<V> {
     }
 }
 
-#[test]
-fn test() {
-    let mut c1 = CoatCheck::new();
-    let mut c2 = CoatCheck::new();
+#[cfg(test)]
+mod test {
+    use super::*;
 
-    let t1 = c1.check(1);
-    let t2 = c1.check(2);
-    assert_eq!(c1[t1], 1);
-    assert_eq!(c1[t2], 2);
-    assert_eq!(c1[t1], 1);
-    assert_eq!(c1.claim(t1).unwrap(), 1);
-    let t3 = c1.check(3);
-    assert_eq!(c1.claim(t3).unwrap(), 3);
+    #[test]
+    fn main() {
+        let mut c1 = CoatCheck::new();
+        let mut c2 = CoatCheck::new();
 
-    let t4 = c2.check(4);
-    let _ = c2.check(5);
+        let t1 = c1.check(1);
+        let t2 = c1.check(2);
+        assert_eq!(c1[t1], 1);
+        assert_eq!(c1[t2], 2);
+        assert_eq!(c1[t1], 1);
+        assert_eq!(c1.claim(t1).unwrap(), 1);
+        let t3 = c1.check(3);
+        assert_eq!(c1.claim(t3).unwrap(), 3);
 
-    assert!(c2.claim(t2).is_err());
-    assert!(c1.claim(t4).is_err());
-    println!("{:?}", c2);
+        let t4 = c2.check(4);
+        let _ = c2.check(5);
 
-    {
-        let mut iter = c2.iter();
-        assert_eq!(iter.next().cloned(), Some(4));
-        assert_eq!(iter.next().cloned(), Some(5));
-        assert_eq!(iter.next(), None);
+        assert!(c2.claim(t2).is_err());
+        assert!(c1.claim(t4).is_err());
+        println!("{:?}", c2);
+
+        {
+            let mut iter = c2.iter();
+            assert_eq!(iter.next().cloned(), Some(4));
+            assert_eq!(iter.next().cloned(), Some(5));
+            assert_eq!(iter.next(), None);
+        }
+
+        {
+            let mut iter = c2.iter_mut();
+            assert_eq!(iter.next().cloned(), Some(4));
+            let it = iter.next().unwrap();
+            assert_eq!(it, &mut 5);
+            *it = 6;
+            assert_eq!(iter.next(), None);
+        }
+
+        {
+            let mut iter = c2.into_iter();
+            assert_eq!(iter.next(), Some(4));
+            assert_eq!(iter.next(), Some(6));
+            assert_eq!(iter.next(), None)
+        }
     }
 
-    {
-        let mut iter = c2.iter_mut();
-        assert_eq!(iter.next().cloned(), Some(4));
-        let it = iter.next().unwrap();
-        assert_eq!(it, &mut 5);
-        *it = 6;
-        assert_eq!(iter.next(), None);
-    }
-
-    {
-        let mut iter = c2.into_iter();
-        assert_eq!(iter.next(), Some(4));
-        assert_eq!(iter.next(), Some(6));
-        assert_eq!(iter.next(), None)
+    #[test]
+    fn check_all() {
+        let mut cc = CoatCheck::new();
+        let mut v: Vec<Ticket> = cc.check_all(vec![1i32,2,3,4].into_iter()).collect();
+        assert_eq!(cc.len(), 4);
+        assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 4);
+        assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 3);
+        assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 2);
+        assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 1);
+        assert!(v.is_empty());
+        assert!(cc.is_empty());
     }
 }
-
-#[test]
-fn test_check_all() {
-    let mut cc = CoatCheck::new();
-    let mut v: Vec<Ticket> = cc.check_all(vec![1i32,2,3,4].into_iter()).collect();
-    assert_eq!(cc.len(), 4);
-    assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 4);
-    assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 3);
-    assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 2);
-    assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 1);
-    assert!(v.is_empty());
-    assert!(cc.is_empty());
-}
-
