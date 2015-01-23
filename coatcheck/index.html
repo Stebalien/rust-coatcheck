@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>coatcheck</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-651'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-655'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
@@ -60,7 +60,7 @@ one doesn&#39;t need to actually access the object.</p>
 <span class='kw'>struct</span> <span class='ident'>System</span> {
     <span class='ident'>callbacks</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span>,
 }
- 
+
 <span class='kw'>impl</span> <span class='ident'>System</span> {
     <span class='kw'>fn</span> <span class='ident'>add_callback</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>cb</span>: <span class='ident'>C</span>) <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>FnMut</span>() <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
         <span class='self'>self</span>.<span class='ident'>callbacks</span>.<span class='ident'>push</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>cb</span>));
@@ -86,7 +86,7 @@ unregistering individual callbacks, you could do something like:</p>
 <span class='kw'>struct</span> <span class='ident'>Handle</span> {
     <span class='ident'>id</span>: <span class='ident'>usize</span>,
 }
- 
+
 <span class='kw'>impl</span> <span class='ident'>System</span> {
     <span class='kw'>fn</span> <span class='ident'>add_callback</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>cb</span>: <span class='ident'>C</span>) <span class='op'>-&gt;</span> <span class='ident'>Handle</span> <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>FnMut</span>() <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
         <span class='kw'>let</span> <span class='ident'>id</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>next_id</span>;
@@ -111,15 +111,15 @@ unregistering individual callbacks, you could do something like:</p>
 fact that it can choose the IDs:</p>
 <pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>coatcheck</span>::{<span class='ident'>CoatCheck</span>, <span class='ident'>Ticket</span>};
- 
+
 <span class='kw'>struct</span> <span class='ident'>System</span> {
     <span class='ident'>callbacks</span>: <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='ident'>Box</span><span class='op'>&lt;</span><span class='ident'>FnMut</span>() <span class='op'>+</span> <span class='lifetime'>&#39;static</span><span class='op'>&gt;&gt;</span>,
 }
- 
+
 <span class='kw'>struct</span> <span class='ident'>Handle</span> {
     <span class='ident'>ticket</span>: <span class='ident'>Ticket</span>, <span class='comment'>// Wrap it for type safety</span>
 }
- 
+
 <span class='kw'>impl</span> <span class='ident'>System</span> {
     <span class='kw'>fn</span> <span class='ident'>add_callback</span><span class='op'>&lt;</span><span class='ident'>C</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>cb</span>: <span class='ident'>C</span>) <span class='op'>-&gt;</span> <span class='ident'>Handle</span> <span class='kw'>where</span> <span class='ident'>C</span>: <span class='ident'>FnMut</span>() <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
         <span class='ident'>Handle</span> { <span class='ident'>ticket</span>: <span class='self'>self</span>.<span class='ident'>callbacks</span>.<span class='ident'>check</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>cb</span>)) }
@@ -153,13 +153,8 @@ Cons:
                     <tr>
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.CoatCheck.html'
                                title='coatcheck::CoatCheck'>CoatCheck</a></td>
-                        <td class='docblock short'></td>
-                    </tr>
-                
-                    <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.GenericIter.html'
-                               title='coatcheck::GenericIter'>GenericIter</a></td>
-                        <td class='docblock short'></td>
+                        <td class='docblock short'><p>A data structure storing values indexed by tickets.</p>
+</td>
                     </tr>
                 
                     <tr>
@@ -172,25 +167,6 @@ Cons:
                     <tr>
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.Tickets.html'
                                title='coatcheck::Tickets'>Tickets</a></td>
-                        <td class='docblock short'></td>
-                    </tr>
-                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
-<table>
-                    <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.IntoIter.html'
-                               title='coatcheck::IntoIter'>IntoIter</a></td>
-                        <td class='docblock short'></td>
-                    </tr>
-                
-                    <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.Iter.html'
-                               title='coatcheck::Iter'>Iter</a></td>
-                        <td class='docblock short'></td>
-                    </tr>
-                
-                    <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='type' href='type.IterMut.html'
-                               title='coatcheck::IterMut'>IterMut</a></td>
                         <td class='docblock short'></td>
                     </tr>
                 </table></section>
