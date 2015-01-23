@@ -1,3 +1,109 @@
+//! # CoatCheck
+//!
+//! CoatCheck is a library for storing values and referencing them by "handles"
+//! (`Tickets`). This library is primarily designed for when one needs to be able
+//! to "register" an object with a system and refer to it after registration but
+//! one doesn't need to actually access the object.
+//!
+//! ## Explanation by example
+//!
+//! For example, let's say you were implementing a callback system:
+//!
+//! ```rust
+//! struct System {
+//!     callbacks: Vec<Box<FnMut() + 'static>>,
+//! }
+//!
+//! impl System {
+//!     fn add_callback<C>(&mut self, cb: C) where C: FnMut() + 'static {
+//!         self.callbacks.push(Box::new(cb));
+//!     }
+//!     fn fire(&mut self) {
+//!         for cb in self.callbacks.iter_mut() {
+//!             (cb)();
+//!         }
+//!     }
+//! }
+//! ```
+//!
+//! This system works but doesn't allow unregistering. If you wanted to allow
+//! unregistering individual callbacks, you could do something like:
+//!
+//! ```rust
+//! use std::collections::HashMap;
+//!
+//! struct System {
+//!     callbacks: HashMap<usize, Box<FnMut() + 'static>>,
+//!     next_id: usize,
+//! }
+//!
+//! struct Handle {
+//!     id: usize,
+//! }
+//!
+//! impl System {
+//!     fn add_callback<C>(&mut self, cb: C) -> Handle where C: FnMut() + 'static {
+//!         let id = self.next_id;
+//!         self.next_id += 1;
+//!         self.callbacks.insert(id, Box::new(cb));
+//!         Handle { id: id }
+//!     }
+//!     fn fire(&mut self) {
+//!         for (_, cb) in self.callbacks.iter_mut() {
+//!             (cb)();
+//!         }
+//!     }
+//!     fn remove_callback(&mut self, handle: Handle) {
+//!         self.callbacks.remove(&handle.id);
+//!     }
+//! }
+//! ```
+//!
+//! However, this is kind of an abuse of a hash table.
+//!
+//! This is where this library comes in. It acts like the above system *but* takes advantage of the
+//! fact that it can choose the IDs:
+//!
+//! ```rust
+//! use coatcheck::{CoatCheck, Ticket};
+//!
+//! struct System {
+//!     callbacks: CoatCheck<Box<FnMut() + 'static>>,
+//! }
+//!
+//! struct Handle {
+//!     ticket: Ticket, // Wrap it for type safety
+//! }
+//!
+//! impl System {
+//!     fn add_callback<C>(&mut self, cb: C) -> Handle where C: FnMut() + 'static {
+//!         Handle { ticket: self.callbacks.check(Box::new(cb)) }
+//!     }
+//!     fn remove_callback(&mut self, handle: Handle) {
+//!         self.callbacks.claim(handle.ticket);
+//!     }
+//!     fn fire(&mut self) {
+//!         for cb in self.callbacks.iter_mut() {
+//!             (*cb)();
+//!         }
+//!     }
+//! }
+//! ```
+//!
+//! ## Discussion
+//!
+//! One thing you might note when using this library is that Tickets can't be duplicated in any way.
+//!
+//! Pros:
+//!  * Ownership: Preventing duplication of the ticket preserves ownership of the
+//!    value to an extent. The value can still be stolen by destroying the
+//!    CoatCheck but that's the only way to get it out without the ticket.
+//!  * Safety: As long as you use the ticket in the right coat check, the index
+//!    operator will never panic.
+//! Cons:
+//!  * Multiple references: There's no way to give away a reference to a value
+//!    (without using actual references, that is).
+
 #![allow(unstable)]
 use std::rand::random;
 use std::fmt;
