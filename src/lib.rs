@@ -160,7 +160,6 @@ use std::slice;
 use std::iter;
 use std::num::Int;
 use std::mem;
-use std::iter::RandomAccessIterator;
 use std::error;
 use std::error::Error as ErrorTrait;
 use Entry::*;
@@ -322,19 +321,6 @@ impl<'a, I, V> DoubleEndedIterator for Tickets<'a, I, V> where I: DoubleEndedIte
     fn next_back(&mut self) -> Option<Ticket> {
         self.iter.next_back().map(|v| self.cc.check(v))
     }
-}
-
-impl<'a, I, V> RandomAccessIterator for Tickets<'a, I, V> where I: RandomAccessIterator<Item=V>, V: 'a {
-    #[inline]
-    fn indexable(&self) -> usize {
-        self.iter.indexable()
-    }
-
-    #[inline]
-    fn idx(&mut self, index: usize) -> Option<Ticket> {
-        self.iter.idx(index).map(|v| self.cc.check(v))
-    }
-
 }
 
 #[doc(hidden)]
