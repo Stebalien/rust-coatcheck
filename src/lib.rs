@@ -152,7 +152,6 @@
 //!    (without using actual references, that is).
 
 #![allow(unstable)]
-use std::rand::random;
 use std::fmt;
 use std::vec;
 use std::ops::{Index, IndexMut};
@@ -165,6 +164,8 @@ use std::iter::RandomAccessIterator;
 use std::error;
 use std::error::Error as ErrorTrait;
 use Entry::*;
+
+mod tagger;
 
 enum Entry<V> {
     Empty(usize /* next free index */),
@@ -233,7 +234,7 @@ impl<V> Entry<V> {
 #[allow(missing_copy_implementations)]
 #[must_use = "you need this ticket to claim your item"]
 pub struct Ticket {
-    tag: usize,
+    tag: tagger::Tag,
     index: usize,
 }
 
@@ -389,7 +390,7 @@ pub type IterMut<'a, V> = GenericIter<&'a mut V,
 
 /// A data structure storing values indexed by tickets.
 pub struct CoatCheck<V> {
-    tag: usize,
+    tag: tagger::Tag,
     data: Vec<Entry<V>>,
     size: usize,
     next_free: usize,
@@ -442,7 +443,7 @@ impl<V> CoatCheck<V> {
     #[inline]
     pub fn with_capacity(capacity: usize) -> CoatCheck<V> {
         CoatCheck {
-            tag: random(),
+            tag: tagger::next_tag(),
             data: Vec::with_capacity(capacity),
             next_free: 0,
             size: 0,
