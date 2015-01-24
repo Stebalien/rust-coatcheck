@@ -204,7 +204,7 @@ pub struct Ticket {
     index: usize,
 }
 
-impl fmt::Show for Ticket {
+impl fmt::Debug for Ticket {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         write!(f, "Ticket")
     }
@@ -623,7 +623,7 @@ impl<V> CoatCheck<V> {
     }
 }
 
-impl<V> fmt::Show for CoatCheck<V> where V: fmt::Show {
+impl<V> fmt::Debug for CoatCheck<V> where V: fmt::Debug {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         try!(write!(f, "{{"));
         for (i, v) in self.iter().enumerate() {
