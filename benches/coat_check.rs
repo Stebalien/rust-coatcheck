@@ -1,4 +1,5 @@
 #![allow(unstable)]
+#![feature(box_syntax)]
 
 extern crate coatcheck;
 extern crate test;
@@ -12,9 +13,9 @@ use coatcheck::*;
 #[bench]
 fn bench_hash_map(b: &mut Bencher) {
     b.iter(|| {
-        let mut map = HashMap::with_capacity(10);
-        let mut res = Vec::with_capacity(10);
-        for i in 0..10 {
+        let mut map = HashMap::with_capacity(0);
+        let mut res = Vec::with_capacity(20);
+        for i in 0..20 {
             map.insert(i, "something");
             res.push(i);
         }
@@ -27,13 +28,27 @@ fn bench_hash_map(b: &mut Bencher) {
 #[bench]
 fn bench_coat_check(b: &mut Bencher) {
     b.iter(|| {
-        let mut cc = CoatCheck::with_capacity(10);
-        let mut res = Vec::with_capacity(10);
-        for _ in 0..10 {
+        let mut cc = CoatCheck::with_capacity(0);
+        let mut res = Vec::with_capacity(20);
+        for _ in 0..20 {
             res.push(cc.check("something"));
         }
         for t in res.into_iter() {
-            let _ = cc.claim(t);
+            let _ = test::black_box(cc.claim(t));
+        }
+    });
+}
+
+#[bench]
+fn bench_box(b: &mut Bencher) {
+    b.iter(|| {
+        let mut res = Vec::with_capacity(20);
+        for _ in 0..20 {
+            res.push(Box::new("something"));
+        }
+        for t in res.into_iter() {
+            let box item = t;
+            test::black_box(item);
         }
     });
 }
