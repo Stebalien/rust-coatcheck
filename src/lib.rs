@@ -299,6 +299,7 @@ impl fmt::Display for AccessError {
     }
 }
 
+/// Iterator that checks-in values in exchange for tickets.
 pub struct Tickets<'a, I, V> where I: Iterator<Item=V>, V: 'a {
     iter: I,
     cc: &'a mut CoatCheck<V>,
