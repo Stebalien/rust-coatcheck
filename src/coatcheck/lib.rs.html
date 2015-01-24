@@ -726,10 +726,6 @@
 <span id="684">684</span>
 <span id="685">685</span>
 <span id="686">686</span>
-<span id="687">687</span>
-<span id="688">688</span>
-<span id="689">689</span>
-<span id="690">690</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -940,9 +936,7 @@
 
     <span class='doccomment'>/// Fill an empty entry with a value and return the next free index.</span>
     <span class='kw'>fn</span> <span class='ident'>fill</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>value</span>: <span class='ident'>V</span>) <span class='op'>-&gt;</span> <span class='ident'>usize</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>other</span> <span class='op'>=</span> <span class='ident'>Full</span>(<span class='ident'>value</span>);
-        <span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='self'>self</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>other</span>);
-        <span class='kw'>match</span> <span class='ident'>other</span> {
+        <span class='kw'>match</span> <span class='ident'>mem</span>::<span class='ident'>replace</span>(<span class='self'>self</span>, <span class='ident'>Full</span>(<span class='ident'>value</span>)) {
             <span class='ident'>Empty</span>(<span class='ident'>next_free</span>) <span class='op'>=&gt;</span> <span class='ident'>next_free</span>,
             _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;expected no entry&quot;</span>),
         }
@@ -950,9 +944,7 @@
 
     <span class='doccomment'>/// Empty a full entry with one setting the next free index and returning the value.</span>
     <span class='kw'>fn</span> <span class='ident'>empty</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>next_free</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>V</span> {
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>other</span> <span class='op'>=</span> <span class='ident'>Empty</span>(<span class='ident'>next_free</span>);
-        <span class='ident'>mem</span>::<span class='ident'>swap</span>(<span class='self'>self</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>other</span>);
-        <span class='kw'>match</span> <span class='ident'>other</span> {
+        <span class='kw'>match</span> <span class='ident'>mem</span>::<span class='ident'>replace</span>(<span class='self'>self</span>, <span class='ident'>Empty</span>(<span class='ident'>next_free</span>)) {
             <span class='ident'>Full</span>(<span class='ident'>value</span>) <span class='op'>=&gt;</span> <span class='ident'>value</span>,
             _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;expected an entry&quot;</span>),
         }
