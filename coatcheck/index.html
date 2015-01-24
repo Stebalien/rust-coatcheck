@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>coatcheck</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-733'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-734'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
@@ -56,7 +56,8 @@ actually need to be able to choose the keys.</p>
                            href="#advantages-over-a-hash-table:">Advantages over a hash table:</a></h2>
 <ol>
 <li>You don&#39;t have to generate your keys.</li>
-<li>CoatCheck is at least 5x faster than the stdlib HashTable.</li>
+<li>CoatCheck is at least 5x faster than the stdlib HashTable for insert/remove operations.</li>
+<li>CoatCheck is about 40x faster for lookup operations.</li>
 </ol>
 
 <h2 id="example" class='section-header'><a
