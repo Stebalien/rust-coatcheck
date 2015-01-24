@@ -174,6 +174,7 @@ enum Entry<V> {
 impl<V> Entry<V> {
 
     /// Take the value if it exists.
+    #[inline]
     fn full(self) -> Option<V> {
         match self {
             Full(value) => Some(value),
@@ -182,6 +183,7 @@ impl<V> Entry<V> {
     }
 
     /// Get an optional reference to the value.
+    #[inline]
     fn full_ref(&self) -> Option<&V> {
         match self {
             &Full(ref value) => Some(value),
@@ -190,6 +192,7 @@ impl<V> Entry<V> {
     }
 
     /// Get an optional mutable reference to the value.
+    #[inline]
     fn full_mut(&mut self) -> Option<&mut V> {
         match self {
             &mut Full(ref mut value) => Some(value),
@@ -198,6 +201,7 @@ impl<V> Entry<V> {
     }
 
     /// Is the entry full
+    #[inline]
     fn is_full(&self) -> bool {
         match self {
             &Full(_) => true,
@@ -206,6 +210,7 @@ impl<V> Entry<V> {
     }
 
     /// Fill an empty entry with a value and return the next free index.
+    #[inline]
     fn fill(&mut self, value: V) -> usize {
         match mem::replace(self, Full(value)) {
             Empty(next_free) => next_free,
@@ -214,6 +219,7 @@ impl<V> Entry<V> {
     }
 
     /// Empty a full entry with one setting the next free index and returning the value.
+    #[inline]
     fn empty(&mut self, next_free: usize) -> V {
         match mem::replace(self, Empty(next_free)) {
             Full(value) => value,
