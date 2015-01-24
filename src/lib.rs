@@ -598,7 +598,10 @@ impl<V> Default for CoatCheck<V> {
 
 #[cfg(test)]
 mod test {
+    extern crate test;
     use super::*;
+    use std::collections::HashMap;
+    use self::test::Bencher;
 
     #[test]
     fn main() {
@@ -656,5 +659,34 @@ mod test {
         assert_eq!(cc.claim(v.pop().unwrap()).unwrap(), 1);
         assert!(v.is_empty());
         assert!(cc.is_empty());
+    }
+
+    #[bench]
+    fn hash_map_grow(b: &mut Bencher) {
+        b.iter(|| {
+            let mut map = HashMap::new();
+            let mut res = Vec::with_capacity(10);
+            for i in 0..10 {
+                map.insert(i, "something");
+                res.push(i);
+            }
+            for i in res.into_iter() {
+                map.remove(&i);
+            }
+        });
+    }
+
+    #[bench]
+    fn coat_check_grow(b: &mut Bencher) {
+        b.iter(|| {
+            let mut cc = CoatCheck::new();
+            let mut res = Vec::with_capacity(10);
+            for _ in 0..10 {
+                res.push(cc.check("something"));
+            }
+            for t in res.into_iter() {
+                cc.claim(t);
+            }
+        });
     }
 }
