@@ -740,7 +740,7 @@ mod test {
     #[bench]
     fn bench_hash_map(b: &mut Bencher) {
         b.iter(|| {
-            let mut map = HashMap::new();
+            let mut map = HashMap::with_capacity(10);
             let mut res = Vec::with_capacity(10);
             for i in 0..10 {
                 map.insert(i, "something");
@@ -755,7 +755,7 @@ mod test {
     #[bench]
     fn bench_coat_check(b: &mut Bencher) {
         b.iter(|| {
-            let mut cc = CoatCheck::new();
+            let mut cc = CoatCheck::with_capacity(10);
             let mut res = Vec::with_capacity(10);
             for _ in 0..10 {
                 res.push(cc.check("something"));
