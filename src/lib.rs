@@ -259,8 +259,10 @@ impl ErrorKind {
 
 /// The error yielded when a claim fails.
 pub struct ClaimError {
-    kind: ErrorKind,
-    ticket: Ticket,
+    /// The error kind.
+    pub kind: ErrorKind,
+    /// The ticket used in the failed claim.
+    pub ticket: Ticket,
 }
 
 impl error::Error for ClaimError {
@@ -284,7 +286,8 @@ impl error::FromError<ClaimError> for Ticket {
 /// The error yielded an access fails.
 #[derive(Copy)]
 pub struct AccessError {
-    kind: ErrorKind,
+    /// The error kind.
+    pub kind: ErrorKind,
 }
 
 impl error::Error for AccessError {
