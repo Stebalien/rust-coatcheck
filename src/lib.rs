@@ -706,4 +706,28 @@ mod test {
             }
         });
     }
+
+    #[bench]
+    fn bench_coat_check_access(b: &mut Bencher) {
+        let mut cc = CoatCheck::new();
+        let mut tickets = Vec::with_capacity(100);
+        for _ in 0..100 {
+            tickets.push(cc.check("something"));
+        }
+        let ref t = tickets[20];
+        b.iter(|&: | {
+            test::black_box(&cc[*t]);
+        });
+    }
+
+    #[bench]
+    fn bench_hash_map_access(b: &mut Bencher) {
+        let mut map = HashMap::with_capacity(100);
+        for i in 0i32..100 {
+            map.insert(i, "something");
+        }
+        b.iter(|&:| {
+            test::black_box(&map[20i32]);
+        });
+    }
 }
