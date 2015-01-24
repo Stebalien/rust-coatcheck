@@ -1266,13 +1266,13 @@
         <span class='kw'>let</span> <span class='ident'>loc</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>next_free</span>;
         <span class='macro'>debug_assert</span><span class='macro'>!</span>(<span class='ident'>loc</span> <span class='op'>&lt;=</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>len</span>());
 
-        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>next_free</span> <span class='op'>==</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>len</span>() {
+        <span class='self'>self</span>.<span class='ident'>next_free</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>next_free</span> <span class='op'>==</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>len</span>() {
             <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>push</span>(<span class='ident'>Full</span>(<span class='ident'>value</span>));
-            <span class='self'>self</span>.<span class='ident'>next_free</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>next_free</span>.<span class='ident'>checked_add</span>(<span class='number'>1</span>).<span class='ident'>unwrap</span>();
+            <span class='self'>self</span>.<span class='ident'>next_free</span>.<span class='ident'>checked_add</span>(<span class='number'>1</span>).<span class='ident'>unwrap</span>()
         } <span class='kw'>else</span> {
             <span class='comment'>// Safe because we&#39;ve recorded that it is safe.</span>
-            <span class='self'>self</span>.<span class='ident'>next_free</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>get_unchecked_mut</span>(<span class='ident'>loc</span>) }.<span class='ident'>fill</span>(<span class='ident'>value</span>);
-        }
+            <span class='kw'>unsafe</span> { <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>get_unchecked_mut</span>(<span class='ident'>loc</span>) }.<span class='ident'>fill</span>(<span class='ident'>value</span>)
+        };
         <span class='self'>self</span>.<span class='ident'>size</span> <span class='op'>+=</span> <span class='number'>1</span>;
         <span class='ident'>Ticket</span> { <span class='ident'>tag</span>: <span class='self'>self</span>.<span class='ident'>tag</span>, <span class='ident'>index</span>: <span class='ident'>loc</span> }
     }
