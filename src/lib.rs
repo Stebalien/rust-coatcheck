@@ -534,7 +534,8 @@ impl<V> CoatCheck<V> {
             self.data.push(Full(value));
             self.next_free = self.next_free.checked_add(1).unwrap();
         } else {
-            self.next_free = self.data[loc].fill(value);
+            // Safe because we've recorded that it is safe.
+            self.next_free = unsafe { self.data.get_unchecked_mut(loc) }.fill(value);
         }
         self.size += 1;
         Ticket { tag: self.tag, index: loc }
@@ -607,7 +608,8 @@ impl<V> CoatCheck<V> {
         if ticket.tag != self.tag {
             Err(ClaimError { ticket: ticket, kind: ErrorKind::WrongCoatCheck })
         } else {
-            let value = self.data[ticket.index].empty(self.next_free);
+            // Safe because, if we've handed out the ticket, this slot must exist.
+            let value = unsafe { self.data.get_unchecked_mut(ticket.index) }.empty(self.next_free);
             self.next_free = ticket.index;
             self.size -= 1;
             Ok(value)
@@ -618,11 +620,13 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(&value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
+    #[inline]
     pub fn get(&self, ticket: &Ticket) -> Result<&V, AccessError> {
         if ticket.tag != self.tag {
             Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         } else {
-            match self.data.index(&ticket.index) {
+            // Safe because, if we've handed out the ticket, this slot must exist.
+            match unsafe { self.data.get_unchecked(ticket.index) } {
                 &Full(ref v) => Ok(v),
                 _ => panic!("forged ticket"),
             }
@@ -633,11 +637,13 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(&mut value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
+    #[inline]
     pub fn get_mut(&mut self, ticket: &Ticket) -> Result<&mut V, AccessError> {
         if ticket.tag != self.tag {
             Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         } else {
-            match self.data.index_mut(&ticket.index) {
+            // Safe because, if we've handed out the ticket, this slot must exist.
+            match unsafe { self.data.get_unchecked_mut(ticket.index) } {
                 &mut Full(ref mut v) => Ok(v),
                 _ => panic!("forged ticket"),
             }
