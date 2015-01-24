@@ -7,7 +7,8 @@
 //! ## Advantages over a hash table:
 //!
 //! 1. You don't have to generate your keys.
-//! 2. CoatCheck is at least 5x faster than the stdlib HashTable.
+//! 2. CoatCheck is at least 5x faster than the stdlib HashTable for insert/remove operations.
+//! 3. CoatCheck is about 40x faster for lookup operations.
 //!
 //! ## Example
 //!
