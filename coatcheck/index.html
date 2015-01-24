@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>coatcheck</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-700'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-704'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
@@ -145,15 +145,22 @@ fact that it can choose the IDs:</p>
                            href="#discussion">Discussion</a></h2>
 <p>One thing you might note when using this library is that Tickets can&#39;t be duplicated in any way.</p>
 
-<p>Pros:
- * Ownership: Preventing duplication of the ticket preserves ownership of the
-   value to an extent. The value can still be stolen by destroying the
-   CoatCheck but that&#39;s the only way to get it out without the ticket.
- * Safety: As long as you use the ticket in the right coat check, the index
-   operator will never panic.
-Cons:
- * Multiple references: There&#39;s no way to give away a reference to a value
-   (without using actual references, that is).</p>
+<h3 id="pros:" class='section-header'><a
+                           href="#pros:">Pros:</a></h3>
+<ul>
+<li><p>Ownership: Preventing duplication of the ticket preserves ownership of the
+value to an extent. The value can still be stolen by destroying the
+CoatCheck but that&#39;s the only way to get it out without the ticket.</p></li>
+<li><p>Safety: As long as you use the ticket in the right coat check, the index
+operator will never panic.</p></li>
+</ul>
+
+<h3 id="cons:" class='section-header'><a
+                           href="#cons:">Cons:</a></h3>
+<ul>
+<li>Multiple references: There&#39;s no way to give away a reference to a value
+(without using actual references, that is).</li>
+</ul>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr>
