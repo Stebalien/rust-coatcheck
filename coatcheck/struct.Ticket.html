@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>coatcheck</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.CoatCheck.html'>CoatCheck</a><a class='struct current' href='struct.Ticket.html'>Ticket</a><a class='struct ' href='struct.Tickets.html'>Tickets</a></div>
+        <p class='location'><a href='index.html'>coatcheck</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.AccessError.html'>AccessError</a><a class='struct ' href='struct.ClaimError.html'>ClaimError</a><a class='struct ' href='struct.CoatCheck.html'>CoatCheck</a><a class='struct current' href='struct.Ticket.html'>Ticket</a><a class='struct ' href='struct.Tickets.html'>Tickets</a></div><div class='block enum'><h2>Enums</h2><a class='enum ' href='enum.ErrorKind.html'>ErrorKind</a></div>
     </section>
 
     <nav class="sub">
@@ -44,14 +44,15 @@
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>coatcheck</a>::<wbr><a class='struct' href=''>Ticket</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-215' href='../src/coatcheck/lib.rs.html#200-203'>[src]</a></span></h1>
+        </span><a id='src-217' href='../src/coatcheck/lib.rs.html#202-205'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Ticket {
     // some fields omitted
 }</pre><div class='docblock'><p>A <code>Ticket</code> is an opaque data structure that can be used to claim the associated value.</p>
 
 <p><em>Note:</em> Tickets can&#39;t be copied to prevent re-use (a ticket can only be exchanged for exactly one
 item).</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Error.html' title='core::fmt::Error'>Error</a>&gt;</code></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Deprecated' title='Deprecated: renamed to Debug'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><a class='stability Deprecated' title='Deprecated: renamed to Debug'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Error.html' title='core::fmt::Error'>Error</a>&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/error/trait.FromError.html' title='core::error::FromError'>FromError</a>&lt;<a class='struct' href='../coatcheck/struct.ClaimError.html' title='coatcheck::ClaimError'>ClaimError</a>&gt; for <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h3><div class='impl-items'><h4 id='method.from_error' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.from_error' class='fnname'>from_error</a>(e: <a class='struct' href='../coatcheck/struct.ClaimError.html' title='coatcheck::ClaimError'>ClaimError</a>) -&gt; <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
