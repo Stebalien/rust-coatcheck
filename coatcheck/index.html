@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>coatcheck</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-704'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-709'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
@@ -153,6 +153,10 @@ value to an extent. The value can still be stolen by destroying the
 CoatCheck but that&#39;s the only way to get it out without the ticket.</p></li>
 <li><p>Safety: As long as you use the ticket in the right coat check, the index
 operator will never panic.</p></li>
+<li><p>Size: If I allowed ticket copying, I&#39;d need to store a &quot;generation&quot; in every ticket and
+along side the ticket&#39;s associated value to be able to distinguish between an old ticket and
+a new one. Currently, I can get away with reusing tickets because they must be turned in
+before freeing a slot.</p></li>
 </ul>
 
 <h3 id="cons:" class='section-header'><a
