@@ -533,13 +533,13 @@ impl<V> CoatCheck<V> {
         let loc = self.next_free;
         debug_assert!(loc <= self.data.len());
 
-        if self.next_free == self.data.len() {
+        self.next_free = if self.next_free == self.data.len() {
             self.data.push(Full(value));
-            self.next_free = self.next_free.checked_add(1).unwrap();
+            self.next_free.checked_add(1).unwrap()
         } else {
             // Safe because we've recorded that it is safe.
-            self.next_free = unsafe { self.data.get_unchecked_mut(loc) }.fill(value);
-        }
+            unsafe { self.data.get_unchecked_mut(loc) }.fill(value)
+        };
         self.size += 1;
         Ticket { tag: self.tag, index: loc }
     }
