@@ -866,6 +866,7 @@
 <span id="824">824</span>
 <span id="825">825</span>
 <span id="826">826</span>
+<span id="827">827</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -1168,6 +1169,7 @@
     }
 }
 
+<span class='doccomment'>/// Iterator that checks-in values in exchange for tickets.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Tickets</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>I</span>, <span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>I</span>: <span class='ident'>Iterator</span><span class='op'>&lt;</span><span class='ident'>Item</span><span class='op'>=</span><span class='ident'>V</span><span class='op'>&gt;</span>, <span class='ident'>V</span>: <span class='lifetime'>&#39;a</span> {
     <span class='ident'>iter</span>: <span class='ident'>I</span>,
     <span class='ident'>cc</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='kw-2'>mut</span> <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>,
