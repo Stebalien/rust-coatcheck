@@ -1,11 +1,11 @@
 //! # CoatCheck
 //!
-//! CoatCheck is a library for storing values and referencing them by "handles"
-//! (`Tickets`). This library is primarily designed for when one needs to be able
-//! to "register" an object with a system and refer to it after registration but
-//! one doesn't need to actually access the object.
+//! CoatCheck is a library for storing values and referencing them by "handles" (`Tickets`). This
+//! library is designed to be used where one would otherwise use a hash table but doesn't actually
+//! need to be able to choose the keys.
 //!
-//! ## Explanation by example
+//!
+//! ## Example
 //!
 //! For example, let's say you were implementing a callback system:
 //!
