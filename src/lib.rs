@@ -795,6 +795,15 @@ mod test {
     }
 
     #[bench]
+    fn bench_coat_check_init(b: &mut Bencher) {
+        b.iter(|| {
+            for _ in 0..1000 {
+                test::black_box(CoatCheck::<u64>::new());
+            }
+        });
+    }
+
+    #[bench]
     fn bench_coat_check_access(b: &mut Bencher) {
         let mut cc = CoatCheck::new();
         let mut tickets = Vec::with_capacity(100);
