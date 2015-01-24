@@ -1551,7 +1551,7 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>get</span>() {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>cc</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
-        <span class='kw'>let</span> <span class='ident'>tickets</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Ticket</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>cc</span>.<span class='ident'>check_all</span>(<span class='number'>0</span>..<span class='number'>10</span>).<span class='ident'>collect</span>();
+        <span class='kw'>let</span> <span class='ident'>tickets</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Ticket</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>cc</span>.<span class='ident'>check_all</span>(<span class='number'>0us</span>..<span class='number'>10</span>).<span class='ident'>collect</span>();
         <span class='kw'>for</span> (<span class='ident'>i</span>, <span class='ident'>t</span>) <span class='kw'>in</span> <span class='ident'>tickets</span>.<span class='ident'>iter</span>().<span class='ident'>enumerate</span>() {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>cc</span>[<span class='op'>*</span><span class='ident'>t</span>], <span class='ident'>i</span>);
         }
