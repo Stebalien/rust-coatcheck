@@ -260,17 +260,6 @@ impl<V, I> Iterator for GenericIter<V, I> where I: Iterator<Item = V> {
     }
 }
 
-impl<V, I> DoubleEndedIterator for GenericIter<V, I> where I: DoubleEndedIterator<Item=V> {
-    fn next_back(&mut self) -> Option<V> {
-        if self.remaining > 0 {
-            self.remaining -= 1;
-            self.inner.next_back()
-        } else {
-            None
-        }
-    }
-}
-
 #[doc(hidden)]
 pub type IntoIter<V>    = GenericIter<V,
                                       iter::FilterMap<Entry<V>,
