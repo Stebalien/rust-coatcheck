@@ -49,18 +49,57 @@ thread_local!(static NEXT_LOCAL_TAG: Cell<Tag> = Cell::new(Tag { prefix: GLOBAL_
 
 #[inline]
 pub fn next_tag() -> Tag {
-    NEXT_LOCAL_TAG.with(|tag| match tag.get() {
-        Tag { offset: u16::MAX, .. } => {
-            let prefix = GLOBAL_TAG_PREFIX.next();
-            tag.set(Tag { prefix: prefix, offset: 1 });
-            Tag { prefix: prefix, offset: 0 }
-        }, 
-        inner_tag => {
-            tag.set(Tag {
-                prefix: inner_tag.prefix,
-                offset: inner_tag.offset + 1
-            });
-            inner_tag
-        }
+    NEXT_LOCAL_TAG.with(|tag| {
+        let next_tag = tag.get();
+        tag.set(if next_tag.offset == u16::MAX {
+            Tag {
+                prefix: GLOBAL_TAG_PREFIX.next(),
+                offset: 0,
+            }
+        } else {
+            Tag {
+                prefix: next_tag.prefix,
+                offset: next_tag.offset + 1
+            }
+        });
+        next_tag
     })
+}
+
+#[test]
+fn test_tagger_unthreaded() {
+    let first_tag = next_tag();
+    for i in first_tag.offset..(u16::MAX) {
+        assert!(next_tag() == Tag { prefix: first_tag.prefix, offset: i+1});
+    }
+    let next = next_tag();
+    assert!(next.prefix != first_tag.prefix);
+    assert!(next.offset == 0);
+    assert!(next_tag() == Tag { prefix: next.prefix, offset: 1 });
+}
+
+#[test]
+fn test_tagger_threaded() {
+    use std::sync::Future;
+    use std::cmp::Ordering;
+    let futures: Vec<Future<TagPrefix>> = (0..10).map(|_| {
+        Future::spawn(move || {
+            let tag = next_tag();
+            assert_eq!(tag.offset, 0);
+            tag.prefix
+        })
+    }).collect();
+    let mut results: Vec<TagPrefix> = futures.into_iter().map(|x| x.into_inner()).collect();
+    results.sort_by(|a, b| {
+        match a.0.cmp(&b.0) {
+            Ordering::Equal => match a.1.cmp(&b.1) {
+                Ordering::Equal => a.2.cmp(&b.2),
+                v => v,
+            },
+            v => v,
+        }
+    });
+    let old_len = results.len();
+    results.dedup();
+    assert_eq!(old_len, results.len());
 }
