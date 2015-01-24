@@ -98,13 +98,17 @@
 //!
 //! One thing you might note when using this library is that Tickets can't be duplicated in any way.
 //!
-//! Pros:
+//! ### Pros:
+//!
 //!  * Ownership: Preventing duplication of the ticket preserves ownership of the
 //!    value to an extent. The value can still be stolen by destroying the
 //!    CoatCheck but that's the only way to get it out without the ticket.
+//!
 //!  * Safety: As long as you use the ticket in the right coat check, the index
 //!    operator will never panic.
-//! Cons:
+//!
+//! ### Cons:
+//!
 //!  * Multiple references: There's no way to give away a reference to a value
 //!    (without using actual references, that is).
 
