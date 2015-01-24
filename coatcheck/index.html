@@ -44,13 +44,20 @@
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>coatcheck</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-696'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-700'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
 <p>CoatCheck is a library for storing values and referencing them by &quot;handles&quot; (<code>Tickets</code>). This
-library is designed to be used where one would otherwise use a hash table but doesn&#39;t actually
-need to be able to choose the keys.</p>
+library is designed to be used where you would otherwise use a hash table but you don&#39;t
+actually need to be able to choose the keys.</p>
+
+<h2 id="advantages-over-a-hash-table:" class='section-header'><a
+                           href="#advantages-over-a-hash-table:">Advantages over a hash table:</a></h2>
+<ol>
+<li>You don&#39;t have to generate your keys.</li>
+<li>CoatCheck is at least 5x faster than the stdlib HashTable.</li>
+</ol>
 
 <h2 id="example" class='section-header'><a
                            href="#example">Example</a></h2>
@@ -104,7 +111,7 @@ unregistering individual callbacks, you could do something like:</p>
 }
 </pre>
 
-<p>However, this is kind of an abuse of a hash table.</p>
+<p>However, we don&#39;t REALLY need a hash table because we don&#39;t care about the keys.</p>
 
 <p>This is where this library comes in. It acts like the above system <em>but</em> takes advantage of the
 fact that it can choose the IDs:</p>
