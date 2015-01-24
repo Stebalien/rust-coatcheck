@@ -608,14 +608,15 @@ impl<V> CoatCheck<V> {
     /// Returns `Err(ClaimError)` if the ticket belongs to another `CoatCheck<V>` (returning the
     /// ticket inside of the ClaimError).
     pub fn claim(&mut self, ticket: Ticket) -> Result<V, ClaimError> {
-        if ticket.tag != self.tag {
-            Err(ClaimError { ticket: ticket, kind: ErrorKind::WrongCoatCheck })
-        } else {
-            // Safe because, if we've handed out the ticket, this slot must exist.
-            let value = unsafe { self.data.get_unchecked_mut(ticket.index) }.empty(self.next_free);
-            self.next_free = ticket.index;
-            self.size -= 1;
-            Ok(value)
+        match ticket {
+            Ticket { tag, index } if tag == self.tag => {
+                // Safe because, if we've handed out the ticket, this slot must exist.
+                let value = unsafe { self.data.get_unchecked_mut(index) }.empty(self.next_free);
+                self.next_free = index;
+                self.size -= 1;
+                Ok(value)
+            },
+            _ => Err(ClaimError { ticket: ticket, kind: ErrorKind::WrongCoatCheck })
         }
     }
 
@@ -624,14 +625,15 @@ impl<V> CoatCheck<V> {
     /// Returns `Ok(&value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
     pub fn get(&self, ticket: &Ticket) -> Result<&V, AccessError> {
-        if ticket.tag != self.tag {
-            Err(AccessError { kind: ErrorKind::WrongCoatCheck })
-        } else {
-            // Safe because, if we've handed out the ticket, this slot must exist.
-            match unsafe { self.data.get_unchecked(ticket.index) } {
+        match ticket {
+            &Ticket { tag, index } if tag == self.tag => match unsafe {
+                // Safe because, if we've handed out the ticket, this slot must exist.
+                self.data.get_unchecked(index)
+            } {
                 &Full(ref v) => Ok(v),
                 _ => panic!("forged ticket"),
-            }
+            },
+            _ =>  Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         }
     }
 
@@ -640,14 +642,15 @@ impl<V> CoatCheck<V> {
     /// Returns `Ok(&mut value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
     pub fn get_mut(&mut self, ticket: &Ticket) -> Result<&mut V, AccessError> {
-        if ticket.tag != self.tag {
-            Err(AccessError { kind: ErrorKind::WrongCoatCheck })
-        } else {
-            // Safe because, if we've handed out the ticket, this slot must exist.
-            match unsafe { self.data.get_unchecked_mut(ticket.index) } {
+        match ticket {
+            &Ticket { tag, index } if tag == self.tag => match unsafe {
+                // Safe because, if we've handed out the ticket, this slot must exist.
+                self.data.get_unchecked_mut(index)
+            } {
                 &mut Full(ref mut v) => Ok(v),
                 _ => panic!("forged ticket"),
-            }
+            },
+            _ =>  Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         }
     }
 }
