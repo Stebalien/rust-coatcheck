@@ -207,9 +207,7 @@ impl<V> Entry<V> {
 
     /// Fill an empty entry with a value and return the next free index.
     fn fill(&mut self, value: V) -> usize {
-        let mut other = Full(value);
-        mem::swap(self, &mut other);
-        match other {
+        match mem::replace(self, Full(value)) {
             Empty(next_free) => next_free,
             _ => panic!("expected no entry"),
         }
@@ -217,9 +215,7 @@ impl<V> Entry<V> {
 
     /// Empty a full entry with one setting the next free index and returning the value.
     fn empty(&mut self, next_free: usize) -> V {
-        let mut other = Empty(next_free);
-        mem::swap(self, &mut other);
-        match other {
+        match mem::replace(self, Empty(next_free)) {
             Full(value) => value,
             _ => panic!("expected an entry"),
         }
