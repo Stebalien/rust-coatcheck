@@ -140,7 +140,7 @@
 //!
 //!  * Safety: As long as you use the ticket in the right coat check, the index
 //!    operator will never panic.
-//!  
+//!
 //!  * Size: If I allowed ticket copying, I'd need to store a "generation" in every ticket and
 //!    along side the ticket's associated value to be able to distinguish between an old ticket and
 //!    a new one. Currently, I can get away with reusing tickets because they must be turned in
