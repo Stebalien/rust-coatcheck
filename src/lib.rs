@@ -129,6 +129,8 @@ use std::iter;
 use std::num::Int;
 use std::mem;
 use std::iter::RandomAccessIterator;
+use std::error;
+use std::error::Error as ErrorTrait;
 use Entry::*;
 
 enum Entry<V> {
@@ -205,6 +207,62 @@ pub struct Ticket {
 impl fmt::Show for Ticket {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         write!(f, "Ticket")
+    }
+}
+
+/// Coat check error types
+#[derive(Copy)]
+pub enum ErrorKind {
+    WrongCoatCheck,
+}
+
+impl ErrorKind {
+    pub fn description(&self) -> &str {
+        match self {
+            &ErrorKind::WrongCoatCheck => "Ticket used in the wrong coat check"
+        }
+    }
+}
+
+/// The error yielded when a claim fails.
+pub struct ClaimError {
+    kind: ErrorKind,
+    ticket: Ticket,
+}
+
+impl error::Error for ClaimError {
+    fn description(&self) -> &str {
+        self.kind.description()
+    }
+}
+
+impl fmt::Display for ClaimError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ClaimError: {}", self.description())
+    }
+}
+
+impl error::FromError<ClaimError> for Ticket {
+    fn from_error(e: ClaimError) -> Ticket {
+        e.ticket
+    }
+}
+
+/// The error yielded an access fails.
+#[derive(Copy)]
+pub struct AccessError {
+    kind: ErrorKind,
+}
+
+impl error::Error for AccessError {
+    fn description(&self) -> &str {
+        self.kind.description()
+    }
+}
+
+impl fmt::Display for AccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "AccessError: {}", self.description())
     }
 }
 
@@ -523,9 +581,9 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(value)` if the ticket belongs to this `CoatCheck<V>` (eating the ticket).
     /// Returns `Err(ticket)` if the ticket belongs to another `CoatCheck<V>` (returning the ticket).
-    pub fn claim(&mut self, ticket: Ticket) -> Result<V, Ticket> {
+    pub fn claim(&mut self, ticket: Ticket) -> Result<V, ClaimError> {
         if ticket.tag != self.tag {
-            Err(ticket)
+            Err(ClaimError { ticket: ticket, kind: ErrorKind::WrongCoatCheck })
         } else {
             let value = self.data[ticket.index].empty(self.next_free);
             self.next_free = ticket.index;
@@ -538,9 +596,9 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(&value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(())` if the ticket belongs to another `CoatCheck<V>`.
-    pub fn get(&self, ticket: &Ticket) -> Result<&V, ()> {
+    pub fn get(&self, ticket: &Ticket) -> Result<&V, AccessError> {
         if ticket.tag != self.tag {
-            Err(())
+            Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         } else {
             match self.data.index(&ticket.index) {
                 &Full(ref v) => Ok(v),
@@ -553,9 +611,9 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(&mut value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(())` if the ticket belongs to another `CoatCheck<V>`.
-    pub fn get_mut(&mut self, ticket: &Ticket) -> Result<&mut V, ()> {
+    pub fn get_mut(&mut self, ticket: &Ticket) -> Result<&mut V, AccessError> {
         if ticket.tag != self.tag {
-            Err(())
+            Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         } else {
             match self.data.index_mut(&ticket.index) {
                 &mut Full(ref mut v) => Ok(v),
