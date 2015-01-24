@@ -703,12 +703,12 @@
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! CoatCheck is a library for storing values and referencing them by &quot;handles&quot;</span>
-<span class='doccomment'>//! (`Tickets`). This library is primarily designed for when one needs to be able</span>
-<span class='doccomment'>//! to &quot;register&quot; an object with a system and refer to it after registration but</span>
-<span class='doccomment'>//! one doesn&#39;t need to actually access the object.</span>
+<span class='doccomment'>//! CoatCheck is a library for storing values and referencing them by &quot;handles&quot; (`Tickets`). This</span>
+<span class='doccomment'>//! library is designed to be used where one would otherwise use a hash table but doesn&#39;t actually</span>
+<span class='doccomment'>//! need to be able to choose the keys.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! ## Explanation by example</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ## Example</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! For example, let&#39;s say you were implementing a callback system:</span>
 <span class='doccomment'>//!</span>

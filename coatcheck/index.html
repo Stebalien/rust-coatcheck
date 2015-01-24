@@ -48,13 +48,12 @@
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
-<p>CoatCheck is a library for storing values and referencing them by &quot;handles&quot;
-(<code>Tickets</code>). This library is primarily designed for when one needs to be able
-to &quot;register&quot; an object with a system and refer to it after registration but
-one doesn&#39;t need to actually access the object.</p>
+<p>CoatCheck is a library for storing values and referencing them by &quot;handles&quot; (<code>Tickets</code>). This
+library is designed to be used where one would otherwise use a hash table but doesn&#39;t actually
+need to be able to choose the keys.</p>
 
-<h2 id="explanation-by-example" class='section-header'><a
-                           href="#explanation-by-example">Explanation by example</a></h2>
+<h2 id="example" class='section-header'><a
+                           href="#example">Example</a></h2>
 <p>For example, let&#39;s say you were implementing a callback system:</p>
 <pre id='rust-example-rendered' class='rust '>
 <span class='kw'>struct</span> <span class='ident'>System</span> {
