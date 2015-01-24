@@ -593,7 +593,7 @@ mod test {
     use self::test::Bencher;
 
     #[test]
-    fn main() {
+    fn two_cc() {
         let mut c1 = CoatCheck::new();
         let mut c2 = CoatCheck::new();
 
@@ -611,30 +611,45 @@ mod test {
 
         assert!(c2.claim(t2).is_err());
         assert!(c1.claim(t4).is_err());
-        println!("{:?}", c2);
+    }
 
+    #[test]
+    fn iter() {
+        let mut cc = CoatCheck::new();
+        cc.check_all(0..2).count();
         {
-            let mut iter = c2.iter();
-            assert_eq!(iter.next().cloned(), Some(4));
-            assert_eq!(iter.next().cloned(), Some(5));
+            let mut iter = cc.iter();
+            assert_eq!(iter.next().cloned(), Some(0));
+            assert_eq!(iter.next().cloned(), Some(1));
             assert_eq!(iter.next(), None);
         }
 
         {
-            let mut iter = c2.iter_mut();
-            assert_eq!(iter.next().cloned(), Some(4));
+            let mut iter = cc.iter_mut();
+            assert_eq!(iter.next().cloned(), Some(0));
             let it = iter.next().unwrap();
-            assert_eq!(it, &mut 5);
-            *it = 6;
+            assert_eq!(it, &mut 1);
+            *it = 2;
             assert_eq!(iter.next(), None);
         }
 
         {
-            let mut iter = c2.into_iter();
-            assert_eq!(iter.next(), Some(4));
-            assert_eq!(iter.next(), Some(6));
+            let mut iter = cc.into_iter();
+            assert_eq!(iter.next(), Some(0));
+            assert_eq!(iter.next(), Some(2));
             assert_eq!(iter.next(), None)
         }
+    }
+
+    #[test]
+    fn get() {
+        let mut cc = CoatCheck::new();
+        let tickets: Vec<Ticket> = cc.check_all(0..10).collect();
+        for (i, t) in tickets.iter().enumerate() {
+            assert_eq!(cc[*t], i);
+        }
+        cc[tickets[2]] = 1;
+        assert_eq!(cc[tickets[2]], 1);
     }
 
     #[test]
@@ -651,7 +666,7 @@ mod test {
     }
 
     #[bench]
-    fn hash_map_grow(b: &mut Bencher) {
+    fn bench_hash_map(b: &mut Bencher) {
         b.iter(|| {
             let mut map = HashMap::new();
             let mut res = Vec::with_capacity(10);
@@ -666,7 +681,7 @@ mod test {
     }
 
     #[bench]
-    fn coat_check_grow(b: &mut Bencher) {
+    fn bench_coat_check(b: &mut Bencher) {
         b.iter(|| {
             let mut cc = CoatCheck::new();
             let mut res = Vec::with_capacity(10);
@@ -674,7 +689,7 @@ mod test {
                 res.push(cc.check("something"));
             }
             for t in res.into_iter() {
-                cc.claim(t);
+                let _ = cc.claim(t);
             }
         });
     }
