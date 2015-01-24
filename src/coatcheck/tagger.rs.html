@@ -105,6 +105,7 @@
 <span id="63">63</span>
 <span id="64">64</span>
 <span id="65">65</span>
+<span id="66">66</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! An efficient module for generating unique IDs</span>
 <span class='doccomment'>//! The unique ID&#39;s are 128bits so you can theoretically run out of them but that&#39;s very unlikely.</span>
@@ -155,6 +156,7 @@
 
 <span class='macro'>thread_local</span><span class='macro'>!</span>(<span class='kw'>static</span> <span class='ident'>NEXT_LOCAL_TAG</span>: <span class='ident'>Cell</span><span class='op'>&lt;</span><span class='ident'>Tag</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>Cell</span>::<span class='ident'>new</span>(<span class='ident'>Tag</span> { <span class='ident'>prefix</span>: <span class='ident'>GLOBAL_TAG_PREFIX</span>.<span class='ident'>next</span>(), <span class='ident'>offset</span>: <span class='number'>0</span> }));
 
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>next_tag</span>() <span class='op'>-&gt;</span> <span class='ident'>Tag</span> {
     <span class='ident'>NEXT_LOCAL_TAG</span>.<span class='ident'>with</span>(<span class='op'>|</span><span class='ident'>tag</span><span class='op'>|</span> <span class='kw'>match</span> <span class='ident'>tag</span>.<span class='ident'>get</span>() {
         <span class='ident'>Tag</span> { <span class='ident'>offset</span>: <span class='ident'>u16</span>::<span class='ident'>MAX</span>, .. } <span class='op'>=&gt;</span> {
