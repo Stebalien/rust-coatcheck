@@ -12,6 +12,39 @@
 //!
 //! ## Example
 //!
+//! ```
+//! use coatcheck::{CoatCheck, Ticket};
+//! use std::error::FromError;
+//!
+//! let mut cc = CoatCheck::new();
+//!
+//! // Check two values.
+//! let ticket1 = cc.check("my value");
+//! let ticket2 = cc.check("my other value");
+//!
+//! // Look at the first one.
+//! println!("{}", cc[ticket1]);
+//!
+//! // Claim the second one.
+//! println!("{}", cc.claim(ticket2).unwrap());
+//!
+//! // Claiming again will fail at compile time.
+//! // println!("{}", cc.claim(ticket2).unwrap());
+//!
+//! // Drain the items into a vector.
+//! let items: Vec<&str> = cc.into_iter().collect();
+//! assert_eq!(items[0], "my value");
+//!
+//! // Create a second coat check:
+//! let mut cc2: CoatCheck<&str> = CoatCheck::new();
+//!
+//! // `ticket1` was never claimed so let's try claiming it in this coat check...
+//! let ticket: Ticket = FromError::from_error(cc2.claim(ticket1).unwrap_err());
+//! // It fails and returns the ticket.
+//! ```
+//!
+//! ## Use Case
+//!
 //! For example, let's say you were implementing a callback system:
 //!
 //! ```rust
@@ -580,7 +613,8 @@ impl<V> CoatCheck<V> {
     /// Claim an item.
     ///
     /// Returns `Ok(value)` if the ticket belongs to this `CoatCheck<V>` (eating the ticket).
-    /// Returns `Err(ticket)` if the ticket belongs to another `CoatCheck<V>` (returning the ticket).
+    /// Returns `Err(ClaimError)` if the ticket belongs to another `CoatCheck<V>` (returning the
+    /// ticket inside of the ClaimError).
     pub fn claim(&mut self, ticket: Ticket) -> Result<V, ClaimError> {
         if ticket.tag != self.tag {
             Err(ClaimError { ticket: ticket, kind: ErrorKind::WrongCoatCheck })
@@ -595,7 +629,7 @@ impl<V> CoatCheck<V> {
     /// Get a reference to the value matching this ticket.
     ///
     /// Returns `Ok(&value)` if the ticket belongs to this `CoatCheck<V>`.
-    /// Returns `Err(())` if the ticket belongs to another `CoatCheck<V>`.
+    /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
     pub fn get(&self, ticket: &Ticket) -> Result<&V, AccessError> {
         if ticket.tag != self.tag {
             Err(AccessError { kind: ErrorKind::WrongCoatCheck })
@@ -610,7 +644,7 @@ impl<V> CoatCheck<V> {
     /// Get a mutable reference to the value matching this ticket.
     ///
     /// Returns `Ok(&mut value)` if the ticket belongs to this `CoatCheck<V>`.
-    /// Returns `Err(())` if the ticket belongs to another `CoatCheck<V>`.
+    /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
     pub fn get_mut(&mut self, ticket: &Ticket) -> Result<&mut V, AccessError> {
         if ticket.tag != self.tag {
             Err(AccessError { kind: ErrorKind::WrongCoatCheck })
