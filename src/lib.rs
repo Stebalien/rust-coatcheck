@@ -623,7 +623,6 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(&value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
-    #[inline]
     pub fn get(&self, ticket: &Ticket) -> Result<&V, AccessError> {
         if ticket.tag != self.tag {
             Err(AccessError { kind: ErrorKind::WrongCoatCheck })
@@ -640,7 +639,6 @@ impl<V> CoatCheck<V> {
     ///
     /// Returns `Ok(&mut value)` if the ticket belongs to this `CoatCheck<V>`.
     /// Returns `Err(AccessError)` if the ticket belongs to another `CoatCheck<V>`.
-    #[inline]
     pub fn get_mut(&mut self, ticket: &Ticket) -> Result<&mut V, AccessError> {
         if ticket.tag != self.tag {
             Err(AccessError { kind: ErrorKind::WrongCoatCheck })
