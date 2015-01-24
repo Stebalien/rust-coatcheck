@@ -860,6 +860,15 @@
 <span id="818">818</span>
 <span id="819">819</span>
 <span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -1653,6 +1662,15 @@
             }
             <span class='kw'>for</span> <span class='ident'>t</span> <span class='kw'>in</span> <span class='ident'>res</span>.<span class='ident'>into_iter</span>() {
                 <span class='kw'>let</span> _ <span class='op'>=</span> <span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>t</span>);
+            }
+        });
+    }
+
+    <span class='attribute'>#[<span class='ident'>bench</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>bench_coat_check_init</span>(<span class='ident'>b</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Bencher</span>) {
+        <span class='ident'>b</span>.<span class='ident'>iter</span>(<span class='op'>||</span> {
+            <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='number'>0</span>..<span class='number'>1000</span> {
+                <span class='ident'>test</span>::<span class='ident'>black_box</span>(<span class='ident'>CoatCheck</span>::<span class='op'>&lt;</span><span class='ident'>u64</span><span class='op'>&gt;</span>::<span class='ident'>new</span>());
             }
         });
     }
