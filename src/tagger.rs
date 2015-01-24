@@ -47,6 +47,7 @@ static GLOBAL_TAG_PREFIX: Tagger = Tagger {
 
 thread_local!(static NEXT_LOCAL_TAG: Cell<Tag> = Cell::new(Tag { prefix: GLOBAL_TAG_PREFIX.next(), offset: 0 }));
 
+#[inline]
 pub fn next_tag() -> Tag {
     NEXT_LOCAL_TAG.with(|tag| match tag.get() {
         Tag { offset: u16::MAX, .. } => {
