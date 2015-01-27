@@ -732,6 +732,18 @@
 <span id="690">690</span>
 <span id="691">691</span>
 <span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -1014,6 +1026,12 @@
     }
 }
 
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>ClaimError</span> {
+    <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+        <span class='ident'>fmt</span>::<span class='ident'>Display</span>::<span class='ident'>fmt</span>(<span class='self'>self</span>, <span class='ident'>f</span>)
+    }
+}
+
 <span class='kw'>impl</span> <span class='ident'>error</span>::<span class='ident'>FromError</span><span class='op'>&lt;</span><span class='ident'>ClaimError</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Ticket</span> {
     <span class='kw'>fn</span> <span class='ident'>from_error</span>(<span class='ident'>e</span>: <span class='ident'>ClaimError</span>) <span class='op'>-&gt;</span> <span class='ident'>Ticket</span> {
         <span class='ident'>e</span>.<span class='ident'>ticket</span>
@@ -1036,6 +1054,12 @@
 <span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Display</span> <span class='kw'>for</span> <span class='ident'>AccessError</span> {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;AccessError: {}&quot;</span>, <span class='self'>self</span>.<span class='ident'>description</span>())
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>AccessError</span> {
+    <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+        <span class='ident'>fmt</span>::<span class='ident'>Display</span>::<span class='ident'>fmt</span>(<span class='self'>self</span>, <span class='ident'>f</span>)
     }
 }
 
