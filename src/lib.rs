@@ -150,8 +150,9 @@
 //!
 //!  * Multiple references: There's no way to give away a reference to a value
 //!    (without using actual references, that is).
-
 #![allow(unstable)]
+extern crate snowflake;
+
 use std::fmt;
 use std::vec;
 use std::ops::{Index, IndexMut};
@@ -162,9 +163,10 @@ use std::num::Int;
 use std::mem;
 use std::error;
 use std::error::Error as ErrorTrait;
-use Entry::*;
 
-mod tagger;
+use snowflake::Snowflake;
+
+use Entry::*;
 
 enum Entry<V> {
     Empty(usize /* next free index */),
@@ -235,7 +237,7 @@ impl<V> Entry<V> {
 #[allow(missing_copy_implementations)]
 #[must_use = "you need this ticket to claim your item"]
 pub struct Ticket {
-    tag: tagger::Tag,
+    tag: Snowflake,
     index: usize,
 }
 
@@ -393,7 +395,7 @@ pub type IterMut<'a, V> = GenericIter<&'a mut V,
 
 /// A data structure storing values indexed by tickets.
 pub struct CoatCheck<V> {
-    tag: tagger::Tag,
+    tag: Snowflake,
     data: Vec<Entry<V>>,
     size: usize,
     next_free: usize,
@@ -446,7 +448,7 @@ impl<V> CoatCheck<V> {
     #[inline]
     pub fn with_capacity(capacity: usize) -> CoatCheck<V> {
         CoatCheck {
-            tag: tagger::next_tag(),
+            tag: Snowflake::new(),
             data: Vec::with_capacity(capacity),
             next_free: 0,
             size: 0,
