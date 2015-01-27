@@ -744,6 +744,8 @@
 <span id="702">702</span>
 <span id="703">703</span>
 <span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -897,8 +899,9 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//!  * Multiple references: There&#39;s no way to give away a reference to a value</span>
 <span class='doccomment'>//!    (without using actual references, that is).</span>
-
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>unstable</span>)]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>snowflake</span>;
+
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>vec</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::{<span class='ident'>Index</span>, <span class='ident'>IndexMut</span>};
@@ -909,9 +912,10 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>ErrorTrait</span>;
-<span class='kw'>use</span> <span class='ident'>Entry</span>::<span class='op'>*</span>;
 
-<span class='kw'>mod</span> <span class='ident'>tagger</span>;
+<span class='kw'>use</span> <span class='ident'>snowflake</span>::<span class='ident'>Snowflake</span>;
+
+<span class='kw'>use</span> <span class='ident'>Entry</span>::<span class='op'>*</span>;
 
 <span class='kw'>enum</span> <span class='ident'>Entry</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> {
     <span class='ident'>Empty</span>(<span class='ident'>usize</span> <span class='comment'>/* next free index */</span>),
@@ -982,7 +986,7 @@
 <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>missing_copy_implementations</span>)]</span>
 <span class='attribute'>#[<span class='ident'>must_use</span> <span class='op'>=</span> <span class='string'>&quot;you need this ticket to claim your item&quot;</span>]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Ticket</span> {
-    <span class='ident'>tag</span>: <span class='ident'>tagger</span>::<span class='ident'>Tag</span>,
+    <span class='ident'>tag</span>: <span class='ident'>Snowflake</span>,
     <span class='ident'>index</span>: <span class='ident'>usize</span>,
 }
 
@@ -1140,7 +1144,7 @@
 
 <span class='doccomment'>/// A data structure storing values indexed by tickets.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> {
-    <span class='ident'>tag</span>: <span class='ident'>tagger</span>::<span class='ident'>Tag</span>,
+    <span class='ident'>tag</span>: <span class='ident'>Snowflake</span>,
     <span class='ident'>data</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Entry</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;&gt;</span>,
     <span class='ident'>size</span>: <span class='ident'>usize</span>,
     <span class='ident'>next_free</span>: <span class='ident'>usize</span>,
@@ -1193,7 +1197,7 @@
     <span class='attribute'>#[<span class='ident'>inline</span>]</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>with_capacity</span>(<span class='ident'>capacity</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> {
         <span class='ident'>CoatCheck</span> {
-            <span class='ident'>tag</span>: <span class='ident'>tagger</span>::<span class='ident'>next_tag</span>(),
+            <span class='ident'>tag</span>: <span class='ident'>Snowflake</span>::<span class='ident'>new</span>(),
             <span class='ident'>data</span>: <span class='ident'>Vec</span>::<span class='ident'>with_capacity</span>(<span class='ident'>capacity</span>),
             <span class='ident'>next_free</span>: <span class='number'>0</span>,
             <span class='ident'>size</span>: <span class='number'>0</span>,
