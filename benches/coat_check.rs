@@ -12,44 +12,57 @@ use coatcheck::*;
 
 #[bench]
 fn bench_hash_map(b: &mut Bencher) {
+    let mut map = HashMap::with_capacity(6);
     b.iter(|| {
-        let mut map = HashMap::with_capacity(0);
-        let mut res = Vec::with_capacity(20);
-        for i in 0..20 {
-            map.insert(i, "something");
-            res.push(i);
-        }
-        for i in res.into_iter() {
-            map.remove(&i);
-        }
+        map.insert(0us, "something");
+        map.insert(1, "something");
+        let _ = map.remove(&0);
+        map.insert(2, "something");
+        map.insert(3, "something");
+        map.insert(4, "something");
+        let _ = map.remove(&3);
+        map.insert(5, "something");
+        let _ = map.remove(&2);
+        let _ = map.remove(&1);
+        let _ = map.remove(&4);
+        let _ = map.remove(&5);
     });
 }
 
 #[bench]
 fn bench_coat_check(b: &mut Bencher) {
+    let mut cc = CoatCheck::with_capacity(6);
     b.iter(|| {
-        let mut cc = CoatCheck::with_capacity(0);
-        let mut res = Vec::with_capacity(20);
-        for _ in 0..20 {
-            res.push(cc.check("something"));
-        }
-        for t in res.into_iter() {
-            let _ = test::black_box(cc.claim(t));
-        }
+        let t1 = cc.check("something");
+        let t2 = cc.check("something");
+        let _ = cc.claim(t1);
+        let t3 = cc.check("something");
+        let t4 = cc.check("something");
+        let t5 = cc.check("something");
+        let _ = cc.claim(t4);
+        let t6 = cc.check("something");
+        let _ = cc.claim(t3);
+        let _ = cc.claim(t2);
+        let _ = cc.claim(t5);
+        let _ = cc.claim(t6);
     });
 }
 
 #[bench]
 fn bench_box(b: &mut Bencher) {
     b.iter(|| {
-        let mut res = Vec::with_capacity(20);
-        for _ in 0..20 {
-            res.push(Box::new("something"));
-        }
-        for t in res.into_iter() {
-            let box item = t;
-            test::black_box(item);
-        }
+        let b1 = Box::new("something");
+        let b2 = Box::new("something");
+        drop(b1);
+        let b3 = Box::new("something");
+        let b4 = Box::new("something");
+        let b5 = Box::new("something");
+        drop(b4);
+        let b6 = Box::new("something");
+        drop(b3);
+        drop(b2);
+        drop(b5);
+        drop(b6);
     });
 }
 
