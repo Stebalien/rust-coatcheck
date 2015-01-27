@@ -279,6 +279,12 @@ impl fmt::Display for ClaimError {
     }
 }
 
+impl fmt::Debug for ClaimError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self, f)
+    }
+}
+
 impl error::FromError<ClaimError> for Ticket {
     fn from_error(e: ClaimError) -> Ticket {
         e.ticket
@@ -301,6 +307,12 @@ impl error::Error for AccessError {
 impl fmt::Display for AccessError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "AccessError: {}", self.description())
+    }
+}
+
+impl fmt::Debug for AccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self, f)
     }
 }
 
