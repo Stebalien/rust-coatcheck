@@ -1,4 +1,4 @@
-#![allow(unstable)]
+#![feature(test, core)]
 
 extern crate coatcheck;
 extern crate test;

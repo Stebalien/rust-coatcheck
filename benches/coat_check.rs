@@ -1,5 +1,4 @@
-#![allow(unstable)]
-#![feature(box_syntax)]
+#![feature(test)]
 
 extern crate coatcheck;
 extern crate test;

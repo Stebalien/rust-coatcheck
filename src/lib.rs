@@ -150,7 +150,7 @@
 //!
 //!  * Multiple references: There's no way to give away a reference to a value
 //!    (without using actual references, that is).
-#![allow(unstable)]
+#![feature(core)]
 extern crate snowflake;
 
 use std::fmt;
