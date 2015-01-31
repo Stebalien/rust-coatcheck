@@ -4,5 +4,5 @@ name = "coatcheck"
 version = "0.0.1"
 authors = ["Steven Allen <steven@stebalien.com>"]
 
-[dependencies.snowflake]
-git = "https://github.com/Stebalien/snowflake.git"
+[dependencies]
+snowflake = "*"

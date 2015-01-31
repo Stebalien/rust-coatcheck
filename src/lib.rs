@@ -164,7 +164,7 @@ use std::mem;
 use std::error;
 use std::error::Error as ErrorTrait;
 
-use snowflake::Snowflake;
+use snowflake::ProcessUniqueId;
 
 use Entry::*;
 
@@ -237,7 +237,7 @@ impl<V> Entry<V> {
 #[allow(missing_copy_implementations)]
 #[must_use = "you need this ticket to claim your item"]
 pub struct Ticket {
-    tag: Snowflake,
+    tag: ProcessUniqueId,
     index: usize,
 }
 
@@ -395,7 +395,7 @@ pub type IterMut<'a, V> = GenericIter<&'a mut V,
 
 /// A data structure storing values indexed by tickets.
 pub struct CoatCheck<V> {
-    tag: Snowflake,
+    tag: ProcessUniqueId,
     data: Vec<Entry<V>>,
     size: usize,
     next_free: usize,
@@ -448,7 +448,7 @@ impl<V> CoatCheck<V> {
     #[inline]
     pub fn with_capacity(capacity: usize) -> CoatCheck<V> {
         CoatCheck {
-            tag: Snowflake::new(),
+            tag: ProcessUniqueId::new(),
             data: Vec::with_capacity(capacity),
             next_free: 0,
             size: 0,
