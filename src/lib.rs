@@ -373,25 +373,20 @@ impl<V, I> Iterator for GenericIter<V, I> where I: Iterator<Item = V> {
 }
 
 #[doc(hidden)]
-pub type IntoIter<V>    = GenericIter<V,
-                                      iter::FilterMap<Entry<V>,
-                                                      V,
-                                                      vec::IntoIter<Entry<V>>,
-                                      fn(Entry<V>) -> Option<V>>>;
+pub type IntoIter<V> = GenericIter<V, iter::FilterMap<
+    vec::IntoIter<Entry<V>>, fn(Entry<V>) -> Option<V>
+>>;
 
 #[doc(hidden)]
-pub type Iter<'a, V>    = GenericIter<&'a V,
-                                      iter::FilterMap<&'a Entry<V>,
-                                                      &'a V,
-                                                      slice::Iter<'a, Entry<V>>,
-                                      fn(&'a Entry<V>) -> Option<&'a V>>>;
+pub type Iter<'a, V> = GenericIter<&'a V, iter::FilterMap<
+    slice::Iter<'a, Entry<V>>, fn(&'a Entry<V>) -> Option<&'a V>
+>>;
 
 #[doc(hidden)]
-pub type IterMut<'a, V> = GenericIter<&'a mut V,
-                                      iter::FilterMap<&'a mut Entry<V>,
-                                                      &'a mut V,
-                                                      slice::IterMut<'a, Entry<V>>,
-                                      fn(&'a mut Entry<V>) -> Option<&'a mut V>>>;
+pub type IterMut<'a, V> = GenericIter<&'a mut V, iter::FilterMap<
+    slice::IterMut<'a, Entry<V>>,
+    fn(&'a mut Entry<V>) -> Option<&'a mut V>
+>>;
 
 /// A data structure storing values indexed by tickets.
 pub struct CoatCheck<V> {
