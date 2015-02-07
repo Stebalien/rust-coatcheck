@@ -1,4 +1,4 @@
-#![feature(test)]
+#![feature(core, test)]
 
 extern crate coatcheck;
 extern crate test;
