@@ -319,12 +319,12 @@ impl fmt::Debug for AccessError {
 }
 
 /// Iterator that checks-in values in exchange for tickets.
-pub struct Tickets<'a, I, V> where I: Iterator<Item=V>, V: 'a {
+pub struct Tickets<'a, I> where I: Iterator, <I as Iterator>::Item: 'a {
     iter: I,
-    cc: &'a mut CoatCheck<V>,
+    cc: &'a mut CoatCheck<<I as Iterator>::Item>,
 }
 
-impl<'a, I, V> Iterator for Tickets<'a, I, V> where I: Iterator<Item=V>, V: 'a {
+impl<'a, I> Iterator for Tickets<'a, I> where I: Iterator, <I as Iterator>::Item: 'a {
     type Item = Ticket;
 
     fn next(&mut self) -> Option<Ticket> {
@@ -335,29 +335,36 @@ impl<'a, I, V> Iterator for Tickets<'a, I, V> where I: Iterator<Item=V>, V: 'a {
     }
 }
 
-impl<'a, I, V> ExactSizeIterator for Tickets<'a, I, V> where I: ExactSizeIterator<Item=V>, V: 'a { }
-impl<'a, I, V> DoubleEndedIterator for Tickets<'a, I, V> where I: DoubleEndedIterator<Item=V>, V: 'a {
+impl<'a, I> ExactSizeIterator for Tickets<'a, I> where
+    I: ExactSizeIterator,
+    <I as Iterator>::Item: 'a
+{ }
+
+impl<'a, I> DoubleEndedIterator for Tickets<'a, I> where
+    I: DoubleEndedIterator,
+    <I as Iterator>::Item: 'a
+{
     fn next_back(&mut self) -> Option<Ticket> {
         self.iter.next_back().map(|v| self.cc.check(v))
     }
 }
 
 #[doc(hidden)]
-struct GenericIter<V, I> where I: Iterator<Item=V> {
+struct GenericIter<I> where I: Iterator {
     inner: I,
     remaining: usize,
 
 }
 
-impl<V, I> ExactSizeIterator for GenericIter<V, I> where I: Iterator<Item=V> {
+impl<I> ExactSizeIterator for GenericIter<I> where I: Iterator {
     #[inline]
     fn len(&self) -> usize {
         self.remaining
     }
 }
 
-impl<V, I> Iterator for GenericIter<V, I> where I: Iterator<Item = V> {
-    type Item = V;
+impl<I> Iterator for GenericIter<I> where I: Iterator {
+    type Item = <I as Iterator>::Item;
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         if self.remaining > 0 {
             self.remaining -= 1;
@@ -373,17 +380,17 @@ impl<V, I> Iterator for GenericIter<V, I> where I: Iterator<Item = V> {
 }
 
 #[doc(hidden)]
-pub type IntoIter<V> = GenericIter<V, iter::FilterMap<
+pub type IntoIter<V> = GenericIter<iter::FilterMap<
     vec::IntoIter<Entry<V>>, fn(Entry<V>) -> Option<V>
 >>;
 
 #[doc(hidden)]
-pub type Iter<'a, V> = GenericIter<&'a V, iter::FilterMap<
+pub type Iter<'a, V> = GenericIter< iter::FilterMap<
     slice::Iter<'a, Entry<V>>, fn(&'a Entry<V>) -> Option<&'a V>
 >>;
 
 #[doc(hidden)]
-pub type IterMut<'a, V> = GenericIter<&'a mut V, iter::FilterMap<
+pub type IterMut<'a, V> = GenericIter<iter::FilterMap<
     slice::IterMut<'a, Entry<V>>,
     fn(&'a mut Entry<V>) -> Option<&'a mut V>
 >>;
@@ -560,7 +567,7 @@ impl<V> CoatCheck<V> {
     /// *Warning:* If you don't take your tickets (collect them from the iterator), you're items
     /// won't be checked.
     #[inline]
-    pub fn check_all<I>(&mut self, iter: I) -> Tickets<I, V> where I: Iterator<Item=V> {
+    pub fn check_all<I>(&mut self, iter: I) -> Tickets<I> where I: Iterator<Item=V> {
         let (lower, _) = iter.size_hint();
         self.reserve(lower);
         Tickets { iter: iter, cc: self }
