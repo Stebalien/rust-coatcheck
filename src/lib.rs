@@ -686,7 +686,6 @@ impl<V> Index<Ticket> for CoatCheck<V> {
 }
 
 impl<V> IndexMut<Ticket> for CoatCheck<V> {
-    type Output = V;
     #[inline]
     fn index_mut(&mut self, ticket: &Ticket) -> &mut V {
         self.get_mut(ticket).ok().expect("ticket for wrong CoatCheck")
