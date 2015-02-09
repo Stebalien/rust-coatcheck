@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>coatcheck</a>::<wbr><a class='struct' href=''>CoatCheck</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-870' href='../src/coatcheck/lib.rs.html#392-397'>[src]</a></span></h1>
+        </span><a id='src-832' href='../src/coatcheck/lib.rs.html#399-404'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct CoatCheck&lt;V&gt; {
     // some fields omitted
 }</pre><div class='docblock'><p>A data structure storing values indexed by tickets.</p>
@@ -153,7 +153,7 @@ check-ins are expected.</p>
 claim values from this CoatCheck.</p>
 
 <p><em>Panics</em> if the size of the <code>CoatCheck&lt;V&gt;</code> would overflow <code>usize::MAX</code>.</p>
-</div><h4 id='method.check_all' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.check_all' class='fnname'>check_all</a>&lt;I&gt;(&amp;mut self, iter: I) -&gt; <a class='struct' href='../coatcheck/struct.Tickets.html' title='coatcheck::Tickets'>Tickets</a>&lt;I, V&gt; <span class='where'>where I: <a class='trait' href='http://doc.rust-lang.org/nightly/core/iter/trait.Iterator.html' title='core::iter::Iterator'>Iterator</a>&lt;Item=V&gt;</span></code></h4>
+</div><h4 id='method.check_all' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.check_all' class='fnname'>check_all</a>&lt;I&gt;(&amp;mut self, iter: I) -&gt; <a class='struct' href='../coatcheck/struct.Tickets.html' title='coatcheck::Tickets'>Tickets</a>&lt;I&gt; <span class='where'>where I: <a class='trait' href='http://doc.rust-lang.org/nightly/core/iter/trait.Iterator.html' title='core::iter::Iterator'>Iterator</a>&lt;Item=V&gt;</span></code></h4>
 <div class='docblock'><p>Check all the items in an iterator and get tickets back.</p>
 
 <p><em>Warning:</em> If you don&#39;t take your tickets (collect them from the iterator), you&#39;re items
