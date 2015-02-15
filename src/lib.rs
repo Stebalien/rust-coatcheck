@@ -416,7 +416,7 @@ impl<V> CoatCheck<V> {
     /// let mut cc: CoatCheck<i32> = CoatCheck::new();
     /// ```
     #[inline]
-    pub fn new() -> CoatCheck<V> {
+    pub fn new() -> Self {
         CoatCheck::with_capacity(0)
     }
 
@@ -448,7 +448,7 @@ impl<V> CoatCheck<V> {
     /// cc.check(11);
     /// ```
     #[inline]
-    pub fn with_capacity(capacity: usize) -> CoatCheck<V> {
+    pub fn with_capacity(capacity: usize) -> Self {
         CoatCheck {
             tag: ProcessUniqueId::new(),
             data: Vec::with_capacity(capacity),
@@ -701,7 +701,7 @@ impl<V> IndexMut<Ticket> for CoatCheck<V> {
 
 impl<V> Default for CoatCheck<V> {
     #[inline]
-    fn default() -> CoatCheck<V> {
+    fn default() -> Self {
         CoatCheck::new()
     }
 }
