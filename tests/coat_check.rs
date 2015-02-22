@@ -57,7 +57,7 @@ fn iter() {
 #[test]
 fn get() {
     let mut cc = CoatCheck::new();
-    let tickets: Vec<Ticket> = cc.check_all(0us..10).collect();
+    let tickets: Vec<Ticket> = cc.check_all(0usize..10).collect();
     for (i, t) in tickets.iter().enumerate() {
         assert_eq!(cc[*t], i);
     }
