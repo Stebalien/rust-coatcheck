@@ -13,7 +13,7 @@ use coatcheck::*;
 fn bench_hash_map(b: &mut Bencher) {
     let mut map = HashMap::with_capacity(6);
     b.iter(|| {
-        map.insert(0us, "something");
+        map.insert(0u8, "something");
         map.insert(1, "something");
         let _ = map.remove(&0);
         map.insert(2, "something");
