@@ -82,7 +82,7 @@ fn bench_coat_check_access(b: &mut Bencher) {
         tickets.push(cc.check("something"));
     }
     let ref t = tickets[20];
-    b.iter(|&: | {
+    b.iter(|| {
         test::black_box(&cc[*t]);
     });
 }
@@ -93,7 +93,7 @@ fn bench_hash_map_access(b: &mut Bencher) {
     for i in 0i32..100 {
         map.insert(i, "something");
     }
-    b.iter(|&:| {
+    b.iter(|| {
         test::black_box(&map[20i32]);
     });
 }
