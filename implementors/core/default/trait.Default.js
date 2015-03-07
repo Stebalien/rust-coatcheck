@@ -1,5 +1,4 @@
 (function() {var implementors = {};
-implementors['snowflake'] = ["<a class='stability Stable' title='Stable'></a>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='snowflake/struct.ProcessUniqueId.html' title='snowflake::ProcessUniqueId'>ProcessUniqueId</a>",];
 implementors['coatcheck'] = ["<a class='stability Stable' title='Stable'></a>impl&lt;V&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='coatcheck/struct.CoatCheck.html' title='coatcheck::CoatCheck'>CoatCheck</a>&lt;V&gt;",];
 
             if (window.register_implementors) {
