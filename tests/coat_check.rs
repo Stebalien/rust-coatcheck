@@ -1,4 +1,4 @@
-#![feature(test, core)]
+#![feature(test)]
 
 extern crate coatcheck;
 extern crate test;
@@ -12,9 +12,9 @@ fn two_cc() {
 
     let t1 = c1.check(1);
     let t2 = c1.check(2);
-    assert_eq!(c1[t1], 1);
-    assert_eq!(c1[t2], 2);
-    assert_eq!(c1[t1], 1);
+    assert_eq!(c1[&t1], 1);
+    assert_eq!(c1[&t2], 2);
+    assert_eq!(c1[&t1], 1);
     assert_eq!(c1.claim(t1).unwrap(), 1);
     let t3 = c1.check(3);
     assert_eq!(c1.claim(t3).unwrap(), 3);
@@ -32,14 +32,14 @@ fn iter() {
     cc.check_all(0..2).count();
     {
         let mut iter = cc.iter();
-        assert_eq!(iter.next().cloned(), Some(0));
-        assert_eq!(iter.next().cloned(), Some(1));
+        assert_eq!(iter.next(), Some(&0));
+        assert_eq!(iter.next(), Some(&1));
         assert_eq!(iter.next(), None);
     }
 
     {
         let mut iter = cc.iter_mut();
-        assert_eq!(iter.next().cloned(), Some(0));
+        assert_eq!(iter.next(), Some(&mut 0));
         let it = iter.next().unwrap();
         assert_eq!(it, &mut 1);
         *it = 2;
@@ -59,10 +59,10 @@ fn get() {
     let mut cc = CoatCheck::new();
     let tickets: Vec<Ticket> = cc.check_all(0usize..10).collect();
     for (i, t) in tickets.iter().enumerate() {
-        assert_eq!(cc[*t], i);
+        assert_eq!(cc[t], i);
     }
-    cc[tickets[2]] = 1;
-    assert_eq!(cc[tickets[2]], 1);
+    cc[&tickets[2]] = 1;
+    assert_eq!(cc[&tickets[2]], 1);
 }
 
 #[test]

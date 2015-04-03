@@ -14,7 +14,7 @@
 //!
 //! ```
 //! use coatcheck::{CoatCheck, Ticket};
-//! use std::error::FromError;
+//! use std::convert::From;
 //!
 //! let mut cc = CoatCheck::new();
 //!
@@ -23,7 +23,7 @@
 //! let ticket2 = cc.check("my other value");
 //!
 //! // Look at the first one.
-//! println!("{}", cc[ticket1]);
+//! println!("{}", cc[&ticket1]);
 //!
 //! // Claim the second one.
 //! println!("{}", cc.claim(ticket2).unwrap());
@@ -39,7 +39,7 @@
 //! let mut cc2: CoatCheck<&str> = CoatCheck::new();
 //!
 //! // `ticket1` was never claimed so let's try claiming it in this coat check...
-//! let ticket: Ticket = FromError::from_error(cc2.claim(ticket1).unwrap_err());
+//! let ticket: Ticket = From::from(cc2.claim(ticket1).unwrap_err());
 //! // It fails and returns the ticket.
 //! ```
 //!
@@ -150,7 +150,6 @@
 //!
 //!  * Multiple references: There's no way to give away a reference to a value
 //!    (without using actual references, that is).
-#![feature(core)]
 extern crate snowflake;
 
 use std::fmt;
@@ -159,9 +158,8 @@ use std::ops::{Index, IndexMut};
 use std::default::Default;
 use std::slice;
 use std::iter;
-use std::num::Int;
 use std::mem;
-use std::error;
+use std::convert::From;
 use std::error::Error as ErrorTrait;
 
 use snowflake::ProcessUniqueId;
@@ -269,7 +267,7 @@ pub struct ClaimError {
     pub ticket: Ticket,
 }
 
-impl error::Error for ClaimError {
+impl ErrorTrait for ClaimError {
     fn description(&self) -> &str {
         self.kind.description()
     }
@@ -287,8 +285,8 @@ impl fmt::Debug for ClaimError {
     }
 }
 
-impl error::FromError<ClaimError> for Ticket {
-    fn from_error(e: ClaimError) -> Ticket {
+impl From<ClaimError> for Ticket {
+    fn from(e: ClaimError) -> Ticket {
         e.ticket
     }
 }
@@ -300,7 +298,7 @@ pub struct AccessError {
     pub kind: ErrorKind,
 }
 
-impl error::Error for AccessError {
+impl ErrorTrait for AccessError {
     fn description(&self) -> &str {
         self.kind.description()
     }
@@ -684,7 +682,7 @@ impl<V> fmt::Debug for CoatCheck<V> where V: fmt::Debug {
     }
 }
 
-impl<V> Index<Ticket> for CoatCheck<V> {
+impl<'a, V> Index<&'a Ticket> for CoatCheck<V> {
     type Output = V;
     #[inline]
     fn index(&self, ticket: &Ticket) -> &V {
@@ -692,7 +690,7 @@ impl<V> Index<Ticket> for CoatCheck<V> {
     }
 }
 
-impl<V> IndexMut<Ticket> for CoatCheck<V> {
+impl<'a, V> IndexMut<&'a Ticket> for CoatCheck<V> {
     #[inline]
     fn index_mut(&mut self, ticket: &Ticket) -> &mut V {
         self.get_mut(ticket).ok().expect("ticket for wrong CoatCheck")
