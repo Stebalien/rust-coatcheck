@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'></p>
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'coatcheck', ty: 'mod', relpath: '../'};</script>
     </section>
 
     <nav class="sub">
@@ -43,7 +43,7 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>coatcheck</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-707'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/coatcheck/lib.rs.html#1-705'>[src]</a></span></h1>
 <div class='docblock'>
 <h1 id="coatcheck" class='section-header'><a
                            href="#coatcheck">CoatCheck</a></h1>
@@ -62,7 +62,7 @@ actually need to be able to choose the keys.</p>
 <h2 id="example" class='section-header'><a
                            href="#example">Example</a></h2><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>coatcheck</span>::{<span class='ident'>CoatCheck</span>, <span class='ident'>Ticket</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>FromError</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>convert</span>::<span class='ident'>From</span>;
 
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>cc</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
 
@@ -71,7 +71,7 @@ actually need to be able to choose the keys.</p>
 <span class='kw'>let</span> <span class='ident'>ticket2</span> <span class='op'>=</span> <span class='ident'>cc</span>.<span class='ident'>check</span>(<span class='string'>&quot;my other value&quot;</span>);
 
 <span class='comment'>// Look at the first one.</span>
-<span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>cc</span>[<span class='ident'>ticket1</span>]);
+<span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>cc</span>[<span class='kw-2'>&amp;</span><span class='ident'>ticket1</span>]);
 
 <span class='comment'>// Claim the second one.</span>
 <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>cc</span>.<span class='ident'>claim</span>(<span class='ident'>ticket2</span>).<span class='ident'>unwrap</span>());
@@ -87,7 +87,7 @@ actually need to be able to choose the keys.</p>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>cc2</span>: <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>str</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>CoatCheck</span>::<span class='ident'>new</span>();
 
 <span class='comment'>// `ticket1` was never claimed so let&#39;s try claiming it in this coat check...</span>
-<span class='kw'>let</span> <span class='ident'>ticket</span>: <span class='ident'>Ticket</span> <span class='op'>=</span> <span class='ident'>FromError</span>::<span class='ident'>from_error</span>(<span class='ident'>cc2</span>.<span class='ident'>claim</span>(<span class='ident'>ticket1</span>).<span class='ident'>unwrap_err</span>());
+<span class='kw'>let</span> <span class='ident'>ticket</span>: <span class='ident'>Ticket</span> <span class='op'>=</span> <span class='ident'>From</span>::<span class='ident'>from</span>(<span class='ident'>cc2</span>.<span class='ident'>claim</span>(<span class='ident'>ticket1</span>).<span class='ident'>unwrap_err</span>());
 <span class='comment'>// It fails and returns the ticket.</span>
 </pre>
 

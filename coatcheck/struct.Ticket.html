@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>coatcheck</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.AccessError.html' title='The error yielded an access fails.'>AccessError</a><a class='struct ' href='struct.ClaimError.html' title='The error yielded when a claim fails.'>ClaimError</a><a class='struct ' href='struct.CoatCheck.html' title='A data structure storing values indexed by tickets.'>CoatCheck</a><a class='struct current' href='struct.Ticket.html' title='A `Ticket` is an opaque data structure that can be used to claim the associated value.'>Ticket</a><a class='struct ' href='struct.Tickets.html' title='Iterator that checks-in values in exchange for tickets.'>Tickets</a></div><div class='block enum'><h2>Enums</h2><a class='enum ' href='enum.ErrorKind.html' title='Coat check error types'>ErrorKind</a></div>
+        <p class='location'><a href='index.html'>coatcheck</a></p><script>window.sidebarCurrent = {name: 'Ticket', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </section>
 
     <nav class="sub">
@@ -43,7 +43,7 @@
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>coatcheck</a>::<wbr><a class='struct' href=''>Ticket</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-188' href='../src/coatcheck/lib.rs.html#239-242'>[src]</a></span></h1>
+        </span><a id='src-187' href='../src/coatcheck/lib.rs.html#237-240'>[src]</a></span></h1>
 <pre class='rust struct'>#[must_use = "you need this ticket to claim your item"]
 pub struct Ticket {
     // some fields omitted
@@ -52,7 +52,7 @@ pub struct Ticket {
 <p><em>Note:</em> Tickets can&#39;t be copied to prevent re-use (a ticket can only be exchanged for exactly one
 item).</p>
 </div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><a class='stability Stable' title='Stable'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Error.html' title='core::fmt::Error'>Error</a>&gt;</code></h4>
-</div><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/error/trait.FromError.html' title='core::error::FromError'>FromError</a>&lt;<a class='struct' href='../coatcheck/struct.ClaimError.html' title='coatcheck::ClaimError'>ClaimError</a>&gt; for <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h3><div class='impl-items'><h4 id='method.from_error' class='method'><a class='stability Stable' title='Stable'></a><code>fn <a href='#method.from_error' class='fnname'>from_error</a>(e: <a class='struct' href='../coatcheck/struct.ClaimError.html' title='coatcheck::ClaimError'>ClaimError</a>) -&gt; <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h4>
+</div><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../coatcheck/struct.ClaimError.html' title='coatcheck::ClaimError'>ClaimError</a>&gt; for <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h3><div class='impl-items'><h4 id='method.from' class='method'><a class='stability Stable' title='Stable'></a><code>fn <a href='#method.from' class='fnname'>from</a>(e: <a class='struct' href='../coatcheck/struct.ClaimError.html' title='coatcheck::ClaimError'>ClaimError</a>) -&gt; <a class='struct' href='../coatcheck/struct.Ticket.html' title='coatcheck::Ticket'>Ticket</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
