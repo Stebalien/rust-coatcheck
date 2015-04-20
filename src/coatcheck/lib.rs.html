@@ -994,7 +994,7 @@
 }
 
 <span class='doccomment'>/// Coat check error types</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>ErrorKind</span> {
     <span class='ident'>WrongCoatCheck</span>,
 }
@@ -1040,7 +1040,7 @@
 }
 
 <span class='doccomment'>/// The error yielded an access fails.</span>
-<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>)]</span>
+<span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>Copy</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>AccessError</span> {
     <span class='doccomment'>/// The error kind.</span>
     <span class='kw'>pub</span> <span class='ident'>kind</span>: <span class='ident'>ErrorKind</span>,
