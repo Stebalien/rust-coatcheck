@@ -3,6 +3,7 @@
 extern crate coatcheck;
 extern crate test;
 
+use std::iter::IntoIterator;
 use coatcheck::*;
 
 #[test]

@@ -15,6 +15,7 @@
 //! ```
 //! use coatcheck::{CoatCheck, Ticket};
 //! use std::convert::From;
+//! use std::iter::IntoIterator;
 //!
 //! let mut cc = CoatCheck::new();
 //!
@@ -157,7 +158,7 @@ use std::vec;
 use std::ops::{Index, IndexMut};
 use std::default::Default;
 use std::slice;
-use std::iter;
+use std::iter::{self, IntoIterator};
 use std::mem;
 use std::convert::From;
 use std::error::Error as ErrorTrait;
@@ -589,16 +590,6 @@ impl<V> CoatCheck<V> {
         }
     }
 
-    /// Creates a consuming iterator, that is, one that moves each value out of the coat check (from
-    /// start to end). The coat check cannot be used after calling this.
-    #[inline]
-    pub fn into_iter(self) -> IntoIter<V> {
-        IntoIter {
-            remaining: self.len(),
-            inner: self.data.into_iter().filter_map(Entry::<V>::full as fn(Entry<V>) -> Option<V>)
-        }
-    }
-
     /// Check if a ticket belongs to this `CoatCheck<V>`.
     ///
     /// Returns true if the ticket belongs to this `CoatCheck<V>`.
@@ -669,6 +660,22 @@ impl<V> CoatCheck<V> {
             _ =>  Err(AccessError { kind: ErrorKind::WrongCoatCheck })
         }
     }
+}
+
+impl<V> IntoIterator for CoatCheck<V> {
+    type Item = V;
+    type IntoIter = IntoIter<V>;
+
+    /// Creates a consuming iterator, that is, one that moves each value out of the coat check (from
+    /// start to end). The coat check cannot be used after calling this.
+    #[inline]
+    fn into_iter(self) -> IntoIter<V> {
+        IntoIter {
+            remaining: self.len(),
+            inner: self.data.into_iter().filter_map(Entry::<V>::full as fn(Entry<V>) -> Option<V>)
+        }
+    }
+
 }
 
 impl<V> fmt::Debug for CoatCheck<V> where V: fmt::Debug {
