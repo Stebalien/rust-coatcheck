@@ -246,7 +246,7 @@ impl fmt::Debug for Ticket {
 }
 
 /// Coat check error types
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum ErrorKind {
     WrongCoatCheck,
 }
@@ -292,7 +292,7 @@ impl From<ClaimError> for Ticket {
 }
 
 /// The error yielded an access fails.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct AccessError {
     /// The error kind.
     pub kind: ErrorKind,
