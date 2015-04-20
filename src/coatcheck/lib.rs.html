@@ -745,6 +745,13 @@
 <span id="703">703</span>
 <span id="704">704</span>
 <span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! # CoatCheck</span>
 <span class='doccomment'>//!</span>
@@ -763,6 +770,7 @@
 <span class='doccomment'>//! ```</span>
 <span class='doccomment'>//! use coatcheck::{CoatCheck, Ticket};</span>
 <span class='doccomment'>//! use std::convert::From;</span>
+<span class='doccomment'>//! use std::iter::IntoIterator;</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! let mut cc = CoatCheck::new();</span>
 <span class='doccomment'>//!</span>
@@ -905,7 +913,7 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::{<span class='ident'>Index</span>, <span class='ident'>IndexMut</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>default</span>::<span class='ident'>Default</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>slice</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>::{<span class='self'>self</span>, <span class='ident'>IntoIterator</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>convert</span>::<span class='ident'>From</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>as</span> <span class='ident'>ErrorTrait</span>;
@@ -1337,16 +1345,6 @@
         }
     }
 
-    <span class='doccomment'>/// Creates a consuming iterator, that is, one that moves each value out of the coat check (from</span>
-    <span class='doccomment'>/// start to end). The coat check cannot be used after calling this.</span>
-    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>IntoIter</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> {
-        <span class='ident'>IntoIter</span> {
-            <span class='ident'>remaining</span>: <span class='self'>self</span>.<span class='ident'>len</span>(),
-            <span class='ident'>inner</span>: <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>into_iter</span>().<span class='ident'>filter_map</span>(<span class='ident'>Entry</span>::<span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>::<span class='ident'>full</span> <span class='kw'>as</span> <span class='kw'>fn</span>(<span class='ident'>Entry</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>)
-        }
-    }
-
     <span class='doccomment'>/// Check if a ticket belongs to this `CoatCheck&lt;V&gt;`.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// Returns true if the ticket belongs to this `CoatCheck&lt;V&gt;`.</span>
@@ -1417,6 +1415,22 @@
             _ <span class='op'>=&gt;</span>  <span class='prelude-val'>Err</span>(<span class='ident'>AccessError</span> { <span class='ident'>kind</span>: <span class='ident'>ErrorKind</span>::<span class='ident'>WrongCoatCheck</span> })
         }
     }
+}
+
+<span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> <span class='ident'>IntoIterator</span> <span class='kw'>for</span> <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> {
+    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>V</span>;
+    <span class='kw'>type</span> <span class='ident'>IntoIter</span> <span class='op'>=</span> <span class='ident'>IntoIter</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>;
+
+    <span class='doccomment'>/// Creates a consuming iterator, that is, one that moves each value out of the coat check (from</span>
+    <span class='doccomment'>/// start to end). The coat check cannot be used after calling this.</span>
+    <span class='attribute'>#[<span class='ident'>inline</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>IntoIter</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> {
+        <span class='ident'>IntoIter</span> {
+            <span class='ident'>remaining</span>: <span class='self'>self</span>.<span class='ident'>len</span>(),
+            <span class='ident'>inner</span>: <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>into_iter</span>().<span class='ident'>filter_map</span>(<span class='ident'>Entry</span>::<span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>::<span class='ident'>full</span> <span class='kw'>as</span> <span class='kw'>fn</span>(<span class='ident'>Entry</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span>)
+        }
+    }
+
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> <span class='ident'>fmt</span>::<span class='ident'>Debug</span> <span class='kw'>for</span> <span class='ident'>CoatCheck</span><span class='op'>&lt;</span><span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>V</span>: <span class='ident'>fmt</span>::<span class='ident'>Debug</span> {
