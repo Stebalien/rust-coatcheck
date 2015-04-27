@@ -15,7 +15,6 @@
 //! ```
 //! use coatcheck::{CoatCheck, Ticket};
 //! use std::convert::From;
-//! use std::iter::IntoIterator;
 //!
 //! let mut cc = CoatCheck::new();
 //!
@@ -156,9 +155,8 @@ extern crate snowflake;
 use std::fmt;
 use std::vec;
 use std::ops::{Index, IndexMut};
-use std::default::Default;
 use std::slice;
-use std::iter::{self, IntoIterator};
+use std::iter;
 use std::mem;
 use std::convert::From;
 use std::error::Error as ErrorTrait;
